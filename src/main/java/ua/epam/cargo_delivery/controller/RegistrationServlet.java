@@ -1,8 +1,5 @@
 package ua.epam.cargo_delivery.controller;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import ua.epam.cargo_delivery.model.dao.Role;
 import ua.epam.cargo_delivery.model.dao.User;
 import ua.epam.cargo_delivery.model.dao.UserManager;
 
@@ -14,25 +11,18 @@ import java.io.IOException;
 
 @WebServlet(name = "RegistrationServlet", value = "/registration")
 public class RegistrationServlet extends HttpServlet {
-    private final Logger log = LogManager.getLogger(RegistrationServlet.class);
-
-    @Override
-    public void init() {
-        //-*
-    }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String password = request.getParameter("password");
-        String email = request.getParameter("email");
-        User user = new User(email, password, Role.USER, true);
-        log.debug(user);
+        User user = new User(
+                request.getParameter("email"),
+                request.getParameter("password"),
+                request.getParameter("name"),
+                request.getParameter("surname"),
+                request.getParameter("phone"),
+                true);
         UserManager.saveUser(user);
+        request.getSession().setAttribute("loggedUser", user);
         response.sendRedirect("index.jsp");
-    }
-
-    @Override
-    public void destroy() {
-        // +-
     }
 }

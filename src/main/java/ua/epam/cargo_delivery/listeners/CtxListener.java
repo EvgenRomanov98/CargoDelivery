@@ -17,10 +17,10 @@ public class CtxListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         try {
             DBManager instance = DBManager.getInstance();
-            log.info("DBManager successful init {}", instance.getConnection());
+            log.info("Successful init DBManager and get connection {}", instance.getConnection());
         } catch (SQLException e) {
             log.error(e);
-            throw new IllegalStateException("Can't get connection", e);
+            throw new IllegalStateException("Fail init DBManager", e);
         }
     }
 }

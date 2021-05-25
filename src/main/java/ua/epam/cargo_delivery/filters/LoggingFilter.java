@@ -12,19 +12,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(filterName = "RegistrationFilter", servletNames = {"RegistrationServlet"})
-public class ErrorFilter implements Filter {
-    private final Logger log = LogManager.getLogger(ErrorFilter.class);
+@WebFilter(filterName = "LoggingFilter")
+public class LoggingFilter implements Filter {
+    private final Logger log = LogManager.getLogger(LoggingFilter.class);
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException {
         try {
-            ((HttpServletRequest) request).getSession().setAttribute("error", null);
+            log.info(">>> REQUEST: {}, {}", request.getServletContext().getContextPath(), request.getParameterMap());
+//            ((HttpServletRequest) request).getSession().setAttribute("error", null);
             chain.doFilter(request, response);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             ((HttpServletRequest) request).getSession().setAttribute("error", e.getMessage());
             ((HttpServletResponse) response).sendRedirect("error.jsp");
         }
+        log.info("<<< RESPONSE: {}", ((HttpServletResponse) response).getStatus());
     }
 }

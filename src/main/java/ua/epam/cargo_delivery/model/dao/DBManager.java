@@ -2,6 +2,7 @@ package ua.epam.cargo_delivery.model.dao;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.epam.cargo_delivery.exceptions.DBException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -14,7 +15,8 @@ public class DBManager {
     private static DBManager instance;
     private final DataSource ds;
 
-    private static final String INSERT_USER = "INSERT INTO users (email, password, role_id) VALUES (?, ?, ?)";
+    private static final String INSERT_USER = "INSERT INTO users (email, password, role_id, name, surname, phone) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_USER = "SELECT * FROM users where email = ?";
 
     private DBManager() {
         try {
@@ -37,16 +39,42 @@ public class DBManager {
         return instance;
     }
 
-    public User saveUser(Connection connection, User user) throws SQLException {
+    public void saveUser(Connection connection, User user) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, user.getEmail());
             ps.setString(2, user.getPassword());
             ps.setInt(3, Role.AUTHORIZE_USER.getId());
+            ps.setString(4, user.getName());
+            ps.setString(5, user.getSurname());
+            ps.setString(6, user.getPhone());
             ps.execute();
             ResultSet gk = ps.getGeneratedKeys();
             gk.next();
-            user.setId(gk.getInt(1));
-            return user;
+            user.setId(gk.getLong(1));
+            user.setRole(Role.AUTHORIZE_USER);
+            user.hidePassword();
+        }
+    }
+
+    public User findUser(Connection c, User user) {
+        try (PreparedStatement ps = c.prepareStatement(SELECT_USER)) {
+            ps.setString(1, user.getEmail());
+            ResultSet rs = ps.executeQuery();
+            if (!rs.next()) {
+                throw new DBException("User with email " + user.getEmail() + " not found");
+            }
+            return new User(
+                    rs.getLong("id"),
+                    rs.getString("email"),
+                    rs.getString("password"),
+                    rs.getString("name"),
+                    rs.getString("surname"),
+                    rs.getString("phone"),
+                    Role.valueOf(rs.getInt("role_id")),
+                    false
+            );
+        } catch (SQLException e) {
+            throw new DBException(e.getMessage(), e);
         }
     }
 }
