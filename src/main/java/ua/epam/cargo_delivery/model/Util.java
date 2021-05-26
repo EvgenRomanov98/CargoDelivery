@@ -24,7 +24,7 @@ public class Util {
 
     public static String toString(Object o) {
         try {
-            return om.writeValueAsString(o);
+            return om.writerWithDefaultPrettyPrinter().writeValueAsString(o);
         } catch (JsonProcessingException e) {
             log.error("Can't write toString for object ".concat(o.getClass().toString()), e);
         }

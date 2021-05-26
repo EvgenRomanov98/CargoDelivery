@@ -5,13 +5,11 @@ import ua.epam.cargo_delivery.exceptions.CreateUserException;
 import ua.epam.cargo_delivery.model.EncryptUtil;
 import ua.epam.cargo_delivery.model.Util;
 
-import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Objects;
 
-public class User implements Serializable {
-    private Long id;
+public class User extends Entity {
     private String email;
     @JsonIgnore
     private String password;
@@ -89,14 +87,6 @@ public class User implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(email, password, name, surname, phone, role);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getEmail() {

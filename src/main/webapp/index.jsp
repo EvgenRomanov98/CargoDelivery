@@ -103,6 +103,35 @@
     </div>
 </div>
 ${loggedUser.name} ${loggedUser.surname}
+
+<select class="form-select" multiple aria-label="multiple select example">
+    <option selected>Open this select menu</option>
+    <option value="1">One</option>
+    <option value="2">Two</option>
+    <option value="3">Three</option>
+</select>
+
+<table id="test" class="table">
+    <caption>List of deliveries</caption>
+    <thead class="table-dark">
+    <tr>
+        <th scope="col">From</th>
+        <th scope="col">To</th>
+        <th scope="col">Distance</th>
+        <th scope="col">Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <c:forEach items="${applicationScope.deliveries}" var="delivery">
+        <tr>
+            <td><c:out value="${delivery.from}"/></td>
+            <td><c:out value="${delivery.to}"/></td>
+            <td><c:out value="${delivery.distance}"/></td>
+            <td><c:out value="${delivery.price}"/></td>
+        </tr>
+    </c:forEach>
+    </tbody>
+</table>
 <script src="bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
         crossorigin="anonymous"></script>

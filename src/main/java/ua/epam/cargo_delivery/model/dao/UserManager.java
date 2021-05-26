@@ -19,19 +19,19 @@ public class UserManager {
 
     public static void saveUser(User user) {
         try (Connection c = db.getConnection()) {
-            log.debug("User for save = {}", user);
+            log.trace("User for save = {}", user);
             db.saveUser(c, user);
-            log.debug("Stored user = {}", user);
+            log.trace("Stored user = {}", user);
         } catch (SQLException e) {
             throw new CreateUserException("Save user in database failed", e);
         }
     }
 
     public static User authenticate(User user) {
-        log.debug("User for authenticate {}", user);
+        log.trace("User for authenticate {}", user);
         try (Connection c = db.getConnection()) {
             User savedUser = db.findUser(c, user);
-            log.debug("Saved user = {}", savedUser);
+            log.trace("Saved user = {}", savedUser);
             if (!savedUser.checkSame(user)) {
                 throw new PermissionDenied("Login or password was wrong");
             }

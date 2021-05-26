@@ -4,11 +4,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.epam.cargo_delivery.exceptions.DBException;
 
-import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.*;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBManager {
     private final Logger log = LogManager.getLogger(DBManager.class);
@@ -17,12 +19,16 @@ public class DBManager {
 
     private static final String INSERT_USER = "INSERT INTO users (email, password, role_id, name, surname, phone) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SELECT_USER = "SELECT * FROM users where email = ?";
+    private static final String SELECT_DELIVERIES_WITH_LIMIT = "SELECT * FROM deliveries LIMIT ? OFFSET ?";
+
 
     private DBManager() {
         try {
-            Context initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-            ds = (DataSource) envContext.lookup("jdbc/TestDB");
+            InitialContext cxt = new InitialContext();
+            ds = (DataSource) cxt.lookup("java:/comp/env/jdbc/postgres");
+            if (ds == null) {
+                throw new DBException("Data source not found!");
+            }
         } catch (NamingException e) {
             throw new IllegalStateException("Error init DBManager", e);
         }
@@ -56,10 +62,11 @@ public class DBManager {
         }
     }
 
-    public User findUser(Connection c, User user) {
+    public User findUser(Connection c, User user) throws SQLException {
+        ResultSet rs = null;
         try (PreparedStatement ps = c.prepareStatement(SELECT_USER)) {
             ps.setString(1, user.getEmail());
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             if (!rs.next()) {
                 throw new DBException("User with email " + user.getEmail() + " not found");
             }
@@ -73,8 +80,44 @@ public class DBManager {
                     Role.valueOf(rs.getInt("role_id")),
                     false
             );
-        } catch (SQLException e) {
-            throw new DBException(e.getMessage(), e);
+        } finally {
+            closeResource(rs);
+        }
+    }
+
+    public List<Delivery> findDeliveries(Connection c, int limit, int page) throws SQLException, ParseException {
+        ResultSet rs = null;
+        try (PreparedStatement ps = c.prepareStatement(SELECT_DELIVERIES_WITH_LIMIT)) {
+            ps.setInt(1, limit);
+            ps.setInt(2, page * limit);
+            rs = ps.executeQuery();
+            List<Delivery> deliveries = new ArrayList<>();
+            while (rs.next()) {
+                deliveries.add(
+                        new Delivery(
+                                rs.getLong("id"),
+                                rs.getString("from"),
+                                rs.getString("to"),
+                                Timestamp.valueOf(rs.getString("create_date")),
+                                Timestamp.valueOf(rs.getString("delivery_date")),
+                                rs.getLong("distance"),
+                                rs.getLong("price")
+                        )
+                );
+            }
+            return deliveries;
+        } finally {
+            closeResource(rs);
+        }
+    }
+
+    private void closeResource(AutoCloseable resource) {
+        if (resource != null) {
+            try {
+                resource.close();
+            } catch (Exception e) {
+                log.error("Fail close resource", e);
+            }
         }
     }
 }
