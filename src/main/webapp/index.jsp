@@ -103,14 +103,53 @@
     </div>
 </div>
 ${loggedUser.name} ${loggedUser.surname}
-
-<select class="form-select" multiple aria-label="multiple select example">
-    <option selected>Open this select menu</option>
-    <option value="1">One</option>
-    <option value="2">Two</option>
-    <option value="3">Three</option>
-</select>
-
+<form class="container">
+    <section class="row">
+        <div class="col">
+            <input name="from" placeholder="from">
+        </div>
+        <div class="col">
+            <input name="to" placeholder="to">
+        </div>
+        <div class="col">
+            <p>Weight, kg</p>
+            <select name="weight" class="form-select" multiple aria-label="multiple select example">
+                <option value="100" selected><100</option>
+                <option value="500">100 - 500</option>
+                <option value="1000">500 - 1000</option>
+                <option value="1500">1000 - 1500</option>
+            </select>
+        </div>
+        <div class="col">
+            <p>Length, mm</p>
+            <select name="length" class="form-select" multiple aria-label="multiple select example">
+                <option value="1000" selected><1000</option>
+                <option value="2000">1000 - 2000</option>
+                <option value="3000">2000 - 3000</option>
+                <option value="4000">3000 - 3000</option>
+            </select>
+        </div>
+        <div class="col">
+            <p>Width, mm</p>
+            <select name="width" class="form-select" multiple aria-label="multiple select example">
+                <option value="400" selected><400</option>
+                <option value="900">400 - 900</option>
+                <option value="1400">900 - 1400</option>
+                <option value="1700">1400 - 1700</option>
+            </select>
+        </div>
+        <div class="col">
+            <p>Height, mm</p>
+            <select name="length" class="form-select" multiple aria-label="multiple select example">
+                <option value="400" selected>>400</option>
+                <option value="900">400 - 900</option>
+                <option value="1400">900 - 1400</option>
+                <option value="1750">1400 - 1750</option>
+            </select>
+        </div>
+        <h3 class="col">Calculated price: <span id="price">100</span></h3>
+    </section>
+</form>
 <table id="test" class="table">
     <caption>List of deliveries</caption>
     <thead class="table-dark">
