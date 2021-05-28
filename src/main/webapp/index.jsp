@@ -1,16 +1,14 @@
+<!DOCTYPE html>
 <%@ page import="ua.epam.cargo_delivery.model.dao.User" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!doctype html>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- Bootstrap CSS -->
-    <link href="bootstrap-5.0.1-dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link href="${pageContext.request.contextPath}/bootstrap-5.0.1-dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Hello, world!</title>
 </head>
 <body>
@@ -103,7 +101,7 @@
     </div>
 </div>
 ${loggedUser.name} ${loggedUser.surname}
-<form class="container">
+<form class="container" action="calculatePrice" id="calculatePriceForm" method="post">
     <section class="row">
         <div class="col">
             <input name="from" placeholder="from">
@@ -140,16 +138,26 @@ ${loggedUser.name} ${loggedUser.surname}
         </div>
         <div class="col">
             <p>Height, mm</p>
-            <select name="length" class="form-select" multiple aria-label="multiple select example">
+            <select name="height" class="form-select" multiple aria-label="multiple select example">
                 <option value="400" selected>>400</option>
                 <option value="900">400 - 900</option>
                 <option value="1400">900 - 1400</option>
                 <option value="1750">1400 - 1750</option>
             </select>
         </div>
-        <h3 class="col">Calculated price: <span id="price">100</span></h3>
+        <h3 class="col">Calculated price: <span id="price">${requestScope.price}</span></h3>
+        <button type="submit" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#registrationStaticBackdrop">
+            Calculate
+        </button>
     </section>
 </form>
+
+<c:if test="${sessionScope.loggedUser.role == 'AUTHORIZE_USER'}">
+    <button form="calculatePriceForm" formaction="createDelivery" type="submit" class="btn btn-primary">
+        Create Delivery
+    </button>
+</c:if>
 <table id="test" class="table">
     <caption>List of deliveries</caption>
     <thead class="table-dark">
@@ -161,7 +169,7 @@ ${loggedUser.name} ${loggedUser.surname}
     </tr>
     </thead>
     <tbody>
-    <c:forEach items="${applicationScope.deliveries}" var="delivery">
+    <c:forEach items="${deliveries}" var="delivery">
         <tr>
             <td><c:out value="${delivery.from}"/></td>
             <td><c:out value="${delivery.to}"/></td>
@@ -171,8 +179,6 @@ ${loggedUser.name} ${loggedUser.surname}
     </c:forEach>
     </tbody>
 </table>
-<script src="bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-        crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
