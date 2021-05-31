@@ -146,8 +146,7 @@ ${loggedUser.name} ${loggedUser.surname}
             </select>
         </div>
         <h3 class="col">Calculated price: <span id="price">${requestScope.price}</span></h3>
-        <button type="submit" class="btn btn-primary" data-bs-toggle="modal"
-                data-bs-target="#registrationStaticBackdrop">
+        <button type="submit" class="btn btn-primary">
             Calculate
         </button>
     </section>

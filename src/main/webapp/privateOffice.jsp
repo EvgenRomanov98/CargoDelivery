@@ -8,6 +8,11 @@
     <!-- Bootstrap CSS -->
     <link href="<%=request.getContextPath()%>/bootstrap-5.0.1-dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Private Office</title>
+    <style>
+        select {
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
 <div class="container">

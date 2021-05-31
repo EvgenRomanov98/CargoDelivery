@@ -134,7 +134,6 @@ public class Delivery extends Entity {
 
     public void calculatePrice() {
         this.price = Math.round(distance * 5 +
-                (cargo.getWeight() + cargo.getLength() + cargo.getWidth() + cargo.getHeight())
-        ) / 1000;
+                (cargo.getWeight() + cargo.getLength() + cargo.getWidth() + cargo.getHeight()) / 1000f);
     }
 }

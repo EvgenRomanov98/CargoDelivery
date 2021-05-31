@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-@WebServlet(name = "HelloServlet", urlPatterns = "/")
-public class HelloServlet extends HttpServlet {
-    private final Logger log = LogManager.getLogger(HelloServlet.class);
+@WebServlet(name = "MainServlet", urlPatterns = "/")
+public class MainServlet extends HttpServlet {
+    private final Logger log = LogManager.getLogger(MainServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {

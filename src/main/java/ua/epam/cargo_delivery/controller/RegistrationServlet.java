@@ -13,16 +13,16 @@ import java.io.IOException;
 public class RegistrationServlet extends HttpServlet {
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         User user = new User(
-                request.getParameter("email"),
-                request.getParameter("password"),
-                request.getParameter("name"),
-                request.getParameter("surname"),
-                request.getParameter("phone"),
+                req.getParameter("email"),
+                req.getParameter("password"),
+                req.getParameter("name"),
+                req.getParameter("surname"),
+                req.getParameter("phone"),
                 true);
         UserManager.saveUser(user);
-        request.getSession().setAttribute("loggedUser", user);
-        response.sendRedirect("index.jsp");
+        req.getSession().setAttribute("loggedUser", user);
+        resp.sendRedirect(req.getContextPath() + "index.jsp");
     }
 }
