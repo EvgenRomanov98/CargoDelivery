@@ -1,5 +1,10 @@
 package ua.epam.cargo_delivery.controller;
 
+import ua.epam.cargo_delivery.model.Util;
+import ua.epam.cargo_delivery.model.dao.Delivery;
+import ua.epam.cargo_delivery.model.dao.DeliveryManager;
+import ua.epam.cargo_delivery.model.dao.DeliveryStatus;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +17,9 @@ public class CreateDeliveryServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("CreateDeliveryServlet = here");
-        resp.sendRedirect(req.getContextPath() + "index.jsp");
+        Delivery delivery = Util.deliveryParseRequest(req);
+        delivery.setStatus(DeliveryStatus.CREATED);
+        DeliveryManager.saveDelivery(delivery);
+        resp.sendRedirect("/privateOffice");
     }
 }

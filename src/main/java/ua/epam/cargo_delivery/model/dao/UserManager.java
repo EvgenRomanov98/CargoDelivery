@@ -20,7 +20,7 @@ public class UserManager {
     public static void saveUser(User user) {
         try (Connection c = db.getConnection()) {
             log.trace("User for save = {}", user);
-            db.saveUser(c, user);
+            db.insertUser(c, user);
             log.trace("Stored user = {}", user);
         } catch (SQLException e) {
             throw new CreateUserException("Save user in database failed", e);

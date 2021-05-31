@@ -6,7 +6,6 @@ import ua.epam.cargo_delivery.exceptions.DBException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.List;
 
 public class DeliveryManager {
@@ -19,11 +18,33 @@ public class DeliveryManager {
 
     public static List<Delivery> findDeliveries(int limit, int page) {
         try (Connection c = db.getConnection()) {
-            List<Delivery> deliveries = db.findDeliveries(c, limit, page);
-            log.trace("Find deliveries = {}", deliveries);
-            return deliveries;
-        } catch (SQLException | ParseException e) {
+            return db.findDeliveries(c, limit, page);
+        } catch (SQLException e) {
             throw new DBException(e.getMessage(), e);
+        }
+    }
+
+    public static void saveDelivery(Delivery delivery) {
+        Connection c = null;
+        try {
+            c = db.getConnection();
+            c.setAutoCommit(false);
+            db.insertCargo(c, delivery.getCargo());
+            db.insertDelivery(c, delivery);
+            c.commit();
+        } catch (SQLException e) {
+            db.rollbackConnection(c);
+            throw new DBException("Save delivery failed", e);
+        } finally {
+            db.closeResource(c);
+        }
+    }
+
+    public static List<Delivery> findDeliveriesForUser(int limit, int page, User user) {
+        try (Connection c = db.getConnection()) {
+            return db.findDeliveriesForUser(c, user, limit, page);
+        } catch (SQLException e) {
+            throw new DBException("Fail get deliveries for user", e);
         }
     }
 }

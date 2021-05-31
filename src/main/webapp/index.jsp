@@ -8,8 +8,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
-    <link href="${pageContext.request.contextPath}/bootstrap-5.0.1-dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Hello, world!</title>
+    <link href="<%=request.getContextPath()%>/bootstrap-5.0.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Index</title>
 </head>
 <body>
 <!-- Optional JavaScript; choose one of the two! -->
@@ -101,14 +101,14 @@
     </div>
 </div>
 ${loggedUser.name} ${loggedUser.surname}
-<form class="container" action="calculatePrice" id="calculatePriceForm" method="post">
+<form class="container" action="calculatePrice" method="get" id="deliveryInfoForm">
     <section class="row">
-        <div class="col">
+        <label class="col">
             <input name="from" placeholder="from">
-        </div>
-        <div class="col">
+        </label>
+        <label class="col">
             <input name="to" placeholder="to">
-        </div>
+        </label>
         <div class="col">
             <p>Weight, kg</p>
             <select name="weight" class="form-select" multiple aria-label="multiple select example">
@@ -153,8 +153,10 @@ ${loggedUser.name} ${loggedUser.surname}
     </section>
 </form>
 
-<c:if test="${sessionScope.loggedUser.role == 'AUTHORIZE_USER'}">
-    <button form="calculatePriceForm" formaction="createDelivery" type="submit" class="btn btn-primary">
+<c:if test="${sessionScope.loggedUser != null && sessionScope.loggedUser.role != 'USER'}">
+    <button class="btn btn-primary" form="deliveryInfoForm"
+<%--            formaction="<%=request.getContextPath()%>/privateOffice.jsp">--%>
+            formmethod="post" formaction="<%=request.getContextPath()%>/privateOffice">
         Create Delivery
     </button>
 </c:if>
@@ -171,14 +173,14 @@ ${loggedUser.name} ${loggedUser.surname}
     <tbody>
     <c:forEach items="${deliveries}" var="delivery">
         <tr>
-            <td><c:out value="${delivery.from}"/></td>
-            <td><c:out value="${delivery.to}"/></td>
+            <td><c:out value="${delivery.whence}"/></td>
+            <td><c:out value="${delivery.whither}"/></td>
             <td><c:out value="${delivery.distance}"/></td>
             <td><c:out value="${delivery.price}"/></td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
-<script src="${pageContext.request.contextPath}/bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js"></script>
+<script src="<%=request.getContextPath()%>/bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
