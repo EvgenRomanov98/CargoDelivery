@@ -1,4 +1,4 @@
-package ua.epam.cargo_delivery.model.dao;
+package ua.epam.cargo_delivery.model.db;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,18 +18,25 @@ public class UserManager {
     }
 
     public static void saveUser(User user) {
-        try (Connection c = db.getConnection()) {
+        Connection c = null;
+        try {
+            c = db.getConnection();
             log.trace("User for save = {}", user);
             db.insertUser(c, user);
             log.trace("Stored user = {}", user);
         } catch (SQLException e) {
+            db.rollbackConnection(c);
             throw new CreateUserException("Save user in database failed", e);
+        } finally {
+            db.closeResource(c);
         }
     }
 
     public static User authenticate(User user) {
         log.trace("User for authenticate {}", user);
-        try (Connection c = db.getConnection()) {
+        Connection c = null;
+        try {
+            c = db.getConnection();
             User savedUser = db.findUser(c, user);
             log.trace("Saved user = {}", savedUser);
             if (!savedUser.checkSame(user)) {
@@ -38,7 +45,10 @@ public class UserManager {
             savedUser.hidePassword();
             return savedUser;
         } catch (SQLException e) {
+            db.rollbackConnection(c);
             throw new DBException(e.getMessage(), e);
+        } finally {
+            db.closeResource(c);
         }
     }
 }

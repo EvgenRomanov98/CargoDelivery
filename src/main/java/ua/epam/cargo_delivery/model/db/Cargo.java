@@ -1,4 +1,4 @@
-package ua.epam.cargo_delivery.model.dao;
+package ua.epam.cargo_delivery.model.db;
 
 import ua.epam.cargo_delivery.model.Util;
 

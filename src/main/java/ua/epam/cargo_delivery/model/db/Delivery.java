@@ -1,15 +1,17 @@
-package ua.epam.cargo_delivery.model.dao;
+package ua.epam.cargo_delivery.model.db;
 
 import ua.epam.cargo_delivery.model.Util;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
 public class Delivery extends Entity {
     private String whence;
     private String whither;
-    private Date createDate;
-    private Date deliveryDate;
+    private LocalDate createDate;
+    private LocalDate deliveryDate;
     private Float distance;
     private Integer price;
     private Cargo cargo;
@@ -19,11 +21,11 @@ public class Delivery extends Entity {
     public Delivery() {
     }
 
-    public Delivery(Long id, String whence, String whither, Date createDate, Date deliveryDate, Float distance, Integer price, DeliveryStatus status) {
+    public Delivery(Long id, String whence, String whither, LocalDate createDate, LocalDate deliveryDate, Float distance, Integer price, DeliveryStatus status) {
         init(id, whence, whither, createDate, deliveryDate, distance, price, status);
     }
 
-    public Delivery(String whence, String whither, Date createDate, Date deliveryDate, Float distance, Integer price, DeliveryStatus status) {
+    public Delivery(String whence, String whither, LocalDate createDate, LocalDate deliveryDate, Float distance, Integer price, DeliveryStatus status) {
         init(null, whence, whither, createDate, deliveryDate, distance, price, status);
     }
 
@@ -31,7 +33,7 @@ public class Delivery extends Entity {
         init(null, whence, whither, null, null, null, null, DeliveryStatus.CREATED);
     }
 
-    private void init(Long id, String from, String to, Date createDate, Date deliveryDate, Float distance, Integer price, DeliveryStatus status) {
+    private void init(Long id, String from, String to, LocalDate createDate, LocalDate deliveryDate, Float distance, Integer price, DeliveryStatus status) {
         this.id = id;
         this.whence = from;
         this.whither = to;
@@ -71,19 +73,19 @@ public class Delivery extends Entity {
         this.whither = whither;
     }
 
-    public Date getCreateDate() {
+    public LocalDate getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(LocalDate createDate) {
         this.createDate = createDate;
     }
 
-    public Date getDeliveryDate() {
+    public LocalDate getDeliveryDate() {
         return deliveryDate;
     }
 
-    public void setDeliveryDate(Date deliveryDate) {
+    public void setDeliveryDate(LocalDate deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
 
@@ -134,6 +136,6 @@ public class Delivery extends Entity {
 
     public void calculatePrice() {
         this.price = Math.round(distance * 5 +
-                (cargo.getWeight() + cargo.getLength() + cargo.getWidth() + cargo.getHeight()) / 1000f);
+                (cargo.getWeight() + cargo.getLength() + cargo.getWidth() + cargo.getHeight()) / 10f);
     }
 }

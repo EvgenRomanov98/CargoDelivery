@@ -1,4 +1,4 @@
-package ua.epam.cargo_delivery.model.dao;
+package ua.epam.cargo_delivery.model.db;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

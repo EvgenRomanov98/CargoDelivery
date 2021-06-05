@@ -1,9 +1,10 @@
-package ua.epam.cargo_delivery.controller;
+package ua.epam.cargo_delivery.servlets;
 
 import ua.epam.cargo_delivery.model.Util;
-import ua.epam.cargo_delivery.model.dao.Delivery;
-import ua.epam.cargo_delivery.model.dao.DeliveryManager;
-import ua.epam.cargo_delivery.model.dao.DeliveryStatus;
+import ua.epam.cargo_delivery.model.db.Delivery;
+import ua.epam.cargo_delivery.model.db.DeliveryManager;
+import ua.epam.cargo_delivery.model.db.DeliveryStatus;
+import ua.epam.cargo_delivery.model.db.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,9 +18,10 @@ public class CreateDeliveryServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Delivery delivery = Util.deliveryParseRequest(req);
+        Delivery delivery = Util.extractDeliveryFromReq(req);
         delivery.setStatus(DeliveryStatus.CREATED);
+        delivery.setUser((User) req.getSession().getAttribute("loggedUser"));
         DeliveryManager.saveDelivery(delivery);
-        resp.sendRedirect("/privateOffice");
+        resp.sendRedirect(req.getContextPath() + "/privateOffice");
     }
 }

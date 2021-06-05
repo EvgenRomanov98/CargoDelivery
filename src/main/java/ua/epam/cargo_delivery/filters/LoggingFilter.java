@@ -20,7 +20,6 @@ public class LoggingFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException {
         try {
             log.info(">>> REQUEST: {}, {}", ((HttpServletRequest) request).getRequestURI(), request.getParameterMap());
-//            ((HttpServletRequest) request).getSession().setAttribute("error", null);
             chain.doFilter(request, response);
         } catch (Exception e) {
             log.error(e.getMessage(), e);

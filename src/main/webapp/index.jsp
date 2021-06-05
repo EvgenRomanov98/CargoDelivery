@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<%@ page import="ua.epam.cargo_delivery.model.dao.User" %>
+<%@ page import="ua.epam.cargo_delivery.model.db.User" %>
+<%@ page import="java.security.Permissions" %>
+<%@ page import="ua.epam.cargo_delivery.model.Action" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html lang="en">
@@ -100,18 +102,30 @@
         </div>
     </div>
 </div>
-${loggedUser.name} ${loggedUser.surname}
-<form class="container" action="calculatePrice" method="get" id="deliveryInfoForm">
+<c:if test="${loggedUser.role != 'USER'}">
+    ${loggedUser.name} ${loggedUser.surname}
+    <a href="<c:url value="/privateOffice"/>">
+        <button class="text-white btn bg-dark">
+            Entry to personal account
+        </button>
+    </a>
+    <a href="<c:url value="/signOut"/>">
+        <button class="text-white btn bg-dark">
+            Sign out
+        </button>
+    </a>
+</c:if>
+<form class="container" action="<c:url value="/privateOffice"/>" method="post">
     <section class="row">
         <label class="col">
-            <input name="from" placeholder="from">
+            <input name="from" id="from" placeholder="from">
         </label>
         <label class="col">
-            <input name="to" placeholder="to">
+            <input name="to" id="to" placeholder="to">
         </label>
         <div class="col">
             <p>Weight, kg</p>
-            <select name="weight" class="form-select" multiple aria-label="multiple select example">
+            <select name="weight" id="weight" class="form-select" multiple aria-label="multiple select example">
                 <option value="100" selected><100</option>
                 <option value="500">100 - 500</option>
                 <option value="1000">500 - 1000</option>
@@ -120,7 +134,7 @@ ${loggedUser.name} ${loggedUser.surname}
         </div>
         <div class="col">
             <p>Length, mm</p>
-            <select name="length" class="form-select" multiple aria-label="multiple select example">
+            <select name="length" id="length" class="form-select" multiple aria-label="multiple select example">
                 <option value="1000" selected><1000</option>
                 <option value="2000">1000 - 2000</option>
                 <option value="3000">2000 - 3000</option>
@@ -129,7 +143,7 @@ ${loggedUser.name} ${loggedUser.surname}
         </div>
         <div class="col">
             <p>Width, mm</p>
-            <select name="width" class="form-select" multiple aria-label="multiple select example">
+            <select name="width" id="width" class="form-select" multiple aria-label="multiple select example">
                 <option value="400" selected><400</option>
                 <option value="900">400 - 900</option>
                 <option value="1400">900 - 1400</option>
@@ -138,27 +152,24 @@ ${loggedUser.name} ${loggedUser.surname}
         </div>
         <div class="col">
             <p>Height, mm</p>
-            <select name="height" class="form-select" multiple aria-label="multiple select example">
+            <select name="height" id="height" class="form-select" multiple aria-label="multiple select example">
                 <option value="400" selected>>400</option>
                 <option value="900">400 - 900</option>
                 <option value="1400">900 - 1400</option>
                 <option value="1750">1400 - 1750</option>
             </select>
         </div>
-        <h3 class="col">Calculated price: <span id="price">${requestScope.price}</span></h3>
-        <button type="submit" class="btn btn-primary">
-            Calculate
-        </button>
+        <h5 class="col">Calculated price: <span id="price">${requestScope.price}</span></h5>
+        <c:if test="${sessionScope.loggedUser.role.checkPermission(Action.CREATE_DELIVERY)}">
+            <button type="submit" class="btn btn-primary">
+                Create Delivery
+            </button>
+        </c:if>
     </section>
 </form>
-
-<c:if test="${sessionScope.loggedUser != null && sessionScope.loggedUser.role != 'USER'}">
-    <button class="btn btn-primary" form="deliveryInfoForm"
-<%--            formaction="<%=request.getContextPath()%>/privateOffice.jsp">--%>
-            formmethod="post" formaction="<%=request.getContextPath()%>/privateOffice">
-        Create Delivery
-    </button>
-</c:if>
+<button class="btn btn-primary" onclick="calculatePrice('<c:url value="/calculatePrice"/>')">
+    Calculate
+</button>
 <table id="test" class="table">
     <caption>List of deliveries</caption>
     <thead class="table-dark">
@@ -180,6 +191,9 @@ ${loggedUser.name} ${loggedUser.surname}
     </c:forEach>
     </tbody>
 </table>
-<script src="<%=request.getContextPath()%>/bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="<c:url value="/bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js"/>" async></script>
+<script src="<c:url value="/js/jquery-3.6.0.min.js"/>" async></script>
+<script src="<c:url value="/js/delivery.js"/>" async></script>
 </body>
 </html>

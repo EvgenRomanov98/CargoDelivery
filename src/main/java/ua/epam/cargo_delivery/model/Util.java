@@ -6,9 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.epam.cargo_delivery.model.dao.Cargo;
-import ua.epam.cargo_delivery.model.dao.Delivery;
-import ua.epam.cargo_delivery.model.dao.User;
+import ua.epam.cargo_delivery.model.db.Cargo;
+import ua.epam.cargo_delivery.model.db.Delivery;
+import ua.epam.cargo_delivery.model.db.User;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,6 +21,7 @@ public class Util {
         om.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         om.setSerializationInclusion(JsonInclude.Include.NON_ABSENT);
         om.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        om.findAndRegisterModules();
     }
 
     private Util() {
@@ -36,7 +37,7 @@ public class Util {
         return "Error processing toString";
     }
 
-    public static Delivery deliveryParseRequest(HttpServletRequest req) {
+    public static Delivery extractDeliveryFromReq(HttpServletRequest req) {
         Delivery delivery = new Delivery(req.getParameter("from"), req.getParameter("to"));
         delivery.setDistance(getDistance(delivery.getWhence(), delivery.getWhither()));
         Cargo cargo = new Cargo(

@@ -2,7 +2,7 @@ package ua.epam.cargo_delivery.listeners;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.epam.cargo_delivery.model.dao.DBManager;
+import ua.epam.cargo_delivery.model.db.DBManager;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

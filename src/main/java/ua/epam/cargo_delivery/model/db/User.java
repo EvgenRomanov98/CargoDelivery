@@ -1,4 +1,4 @@
-package ua.epam.cargo_delivery.model.dao;
+package ua.epam.cargo_delivery.model.db;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import ua.epam.cargo_delivery.exceptions.CreateUserException;
@@ -19,6 +19,10 @@ public class User extends Entity {
     private Role role;
 
     public User() {
+    }
+
+    public User(Role role) {
+        init(null, null, null, null, null, null, role, false);
     }
 
     public User(String email, String password, boolean hashPassword) {

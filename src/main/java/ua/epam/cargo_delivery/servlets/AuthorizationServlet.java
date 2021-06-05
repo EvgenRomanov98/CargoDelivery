@@ -1,7 +1,7 @@
-package ua.epam.cargo_delivery.controller;
+package ua.epam.cargo_delivery.servlets;
 
-import ua.epam.cargo_delivery.model.dao.User;
-import ua.epam.cargo_delivery.model.dao.UserManager;
+import ua.epam.cargo_delivery.model.db.User;
+import ua.epam.cargo_delivery.model.db.UserManager;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +18,6 @@ public class AuthorizationServlet extends HttpServlet {
                 req.getParameter("password"),
                 false);
         req.getSession().setAttribute("loggedUser", UserManager.authenticate(user));
-        resp.sendRedirect("index.jsp");
+        resp.sendRedirect(req.getContextPath() + "/");
     }
 }

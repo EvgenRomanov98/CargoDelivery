@@ -1,8 +1,8 @@
-package ua.epam.cargo_delivery.model.dao;
+package ua.epam.cargo_delivery.model.db;
 
 public enum DeliveryStatus {
 
-    CREATED(1), PAID(2), TRANSFER(3), DELIVERED(4);
+    CREATED(1), APPROVED(2), PAID(3), TRANSFER(4), DELIVERED(5), DELETED(6);
 
     private int id;
 
