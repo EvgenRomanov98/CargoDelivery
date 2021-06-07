@@ -1,5 +1,6 @@
 package ua.epam.cargo_delivery.servlets;
 
+import ua.epam.cargo_delivery.clients.MapBoxClient;
 import ua.epam.cargo_delivery.dto.DeliveryDTO;
 import ua.epam.cargo_delivery.model.Util;
 import ua.epam.cargo_delivery.model.db.Delivery;
@@ -17,7 +18,7 @@ public class CalculatePriceServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Delivery delivery = Util.extractDeliveryFromReq(req);
-        DeliveryDTO dto = Util.getGeoJson(delivery.getWhence(), delivery.getWhither());
+        DeliveryDTO dto = MapBoxClient.getGeoJson(delivery.getWhence(), delivery.getWhither());
         delivery.setDistance(dto.getDistance());
         delivery.calculatePrice();
         dto.setPrice(delivery.getPrice().toString());
