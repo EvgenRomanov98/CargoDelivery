@@ -8,13 +8,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
-    <link href="<%=request.getContextPath()%>/bootstrap-5.0.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<c:url value="/bootstrap-5.0.1-dist/css/bootstrap.min.css"/>" rel="stylesheet">
+    <link href="<c:url value="/css/delivery.css"/>" rel="stylesheet">
     <title>Private Office</title>
-    <style>
-        select {
-            overflow: hidden;
-        }
-    </style>
 </head>
 <body>
 <nav class="nav nav-fill">

@@ -11,7 +11,8 @@ function calculatePrice(url) {
         },
         function (data) {
             let resp = JSON.parse(data);
-            document.getElementById("price").innerHTML = resp.price
+            document.getElementById("price").innerHTML = 'Calculated price: ' + resp.price
+            printRoute(resp.lngLat)
         });
 }
 

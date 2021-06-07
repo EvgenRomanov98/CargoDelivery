@@ -3,8 +3,6 @@ package ua.epam.cargo_delivery.model.db;
 import ua.epam.cargo_delivery.model.Util;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 
 public class Delivery extends Entity {
@@ -135,7 +133,7 @@ public class Delivery extends Entity {
     }
 
     public void calculatePrice() {
-        this.price = Math.round(distance * 5 +
+        this.price = Math.round((distance / 1000) * 5 +
                 (cargo.getWeight() + cargo.getLength() + cargo.getWidth() + cargo.getHeight()) / 10f);
     }
 }
