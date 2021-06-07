@@ -31,7 +31,6 @@ public class MapBoxClient {
         }
     }
 
-    //    https://api.mapbox.com/directions/v5/mapbox/driving/-122.39636,37.79129;-122.39732,37.79283?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiZXZyb205OCIsImEiOiJja3BqbWJ2dGUweWNxMnZvOG56bTg3OWcyIn0.dzdxhoOvGG6pBQz0uiDFmQ
     public static DeliveryDTO getGeoJson(String from, String to) {
         from = from.replace(" ", "");
         to = to.replace(" ", "");
