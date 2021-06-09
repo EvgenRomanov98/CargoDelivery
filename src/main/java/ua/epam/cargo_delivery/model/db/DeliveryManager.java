@@ -97,4 +97,14 @@ public class DeliveryManager {
             throw new DBException("Can't update deliveryDate to " + deliveryDate, e);
         }
     }
+
+    public static Integer getNumberOfPageDeliveries(int limit) {
+        try (Connection c = db.getConnection()) {
+            Integer numberOfDeliveries = db.numberOfDeliveries(c);
+            int numberOfPage = numberOfDeliveries / limit;
+            return numberOfDeliveries % limit > 0 ? numberOfPage + 1 : numberOfPage;
+        } catch (SQLException e) {
+            throw new DBException("Can't find number of deliveries ", e);
+        }
+    }
 }

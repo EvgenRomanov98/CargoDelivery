@@ -21,7 +21,7 @@
 <nav class="navbar sticky-top navbar-light bg-light">
     <div class="container-fluid">
         <div>
-            <a class="navbar-brand" href="#">123 Delivery</a>
+            <a id="homeLocation" class="navbar-brand" href="<c:url value="/"/>">123 Delivery</a>
             <!-- Option 1: Bootstrap Bundle with Popper -->
             <!-- Button trigger modal -->
         </div>
@@ -96,47 +96,49 @@
                     </select>
                 </label>
             </section>
-            <section class="row align-items-center">
-                <h6 id="price" class="col-6 pt-1"></h6>
-                <div class="col">
-                    <div class="row justify-content-end gx-1 pt-1">
-                        <button class="btn btn-outline-info col-4 me-2" type="button"
-                                onclick="calculatePrice('<c:url value="/calculatePrice"/>')">
-                            Calculate
+            <section class="row align-items-center pt-1">
+                <h6 id="price" class="col-6 my-0"></h6>
+                <div class="col-6 d-flex flex-row-reverse">
+                    <c:if test="${sessionScope.loggedUser.role.checkPermission(Action.CREATE_DELIVERY)}">
+                        <button type="submit"
+                                class="btn btn-outline-success col-5 col-xxl-4 ms-2">
+                            Create
                         </button>
-                        <c:if test="${sessionScope.loggedUser.role.checkPermission(Action.CREATE_DELIVERY)}">
-                            <button type="submit" class="btn btn-outline-success col-4">
-                                Create Delivery
-                            </button>
-                        </c:if>
-                    </div>
+                    </c:if>
+                    <button class="btn btn-outline-info col-5 col-xxl-4" type="button"
+                            onclick="calculatePrice('<c:url value="/calculatePrice"/>')">
+                        Calculate
+                    </button>
                 </div>
             </section>
         </form>
     </div>
 </div>
-<table id="test" class="table">
-    <caption>List of deliveries</caption>
-    <thead class="table-dark">
-    <tr>
-        <th scope="col">From</th>
-        <th scope="col">To</th>
-        <th scope="col">Distance</th>
-        <th scope="col">Price</th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach items="${deliveries}" var="delivery">
+<section id="tableSection">
+    <input type="text" id="filterInput" placeholder="Search for value.."
+           title="Enter text to filter table">
+    <table id="deliveryTable" class="table">
+        <caption>List of deliveries</caption>
+        <thead class="table-dark">
         <tr>
-            <td><c:out value="${delivery.whence}"/></td>
-            <td><c:out value="${delivery.whither}"/></td>
-            <td><c:out value="${delivery.distance}"/></td>
-            <td><c:out value="${delivery.price}"/></td>
+            <th scope="col">From</th>
+            <th scope="col">To</th>
+            <th scope="col">Distance</th>
+            <th scope="col">Price</th>
         </tr>
-    </c:forEach>
-    </tbody>
-</table>
-
+        </thead>
+        <tbody>
+        <c:forEach items="${deliveries}" var="delivery">
+            <tr>
+                <td><c:out value="${delivery.whence}"/></td>
+                <td><c:out value="${delivery.whither}"/></td>
+                <td><c:out value="${delivery.distance}"/></td>
+                <td><c:out value="${delivery.price}"/></td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+</section>
 
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -215,11 +217,11 @@
     </div>
 </div>
 
-
 <script src="<c:url value="/bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js"/>" async></script>
 <script src="<c:url value="/js/jquery-3.6.0.min.js"/>" async></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.js"></script>
 <script src="<c:url value="/js/delivery.js"/>" async></script>
 <script src="<c:url value="/js/map.js"/>" async></script>
+<%--<script src="<c:url value="/js/pagination.min.js"/>" async></script>--%>
 </body>
 </html>

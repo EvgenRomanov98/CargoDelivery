@@ -38,6 +38,8 @@ public class DBManager {
     private static final String SELECT_DELIVERIES_FOR_USER_IN_STATUS = "SELECT id AS d_id, * FROM deliveries WHERE user_id = ? AND status_id = ?";
     private static final String UPDATE_STATUS_DELIVERY = "UPDATE deliveries SET status_id = ? WHERE id = ?";
     private static final String UPDATE_DATE_DELIVERY = "UPDATE deliveries SET delivery_date = to_date(?, 'YYYY-MM-DD') WHERE id = ?";
+    private static final String SELECT_NUMBER_OF_DELIVERIES = "SELECT count(*) FROM deliveries";
+    private static final String SELECT_CITIES = "SELECT * FROM cities";
 
     private DBManager() {
         try {
@@ -169,7 +171,6 @@ public class DBManager {
         }
     }
 
-    // TODO: 31.05.21 rename findDeliveriesFullEager?
     public List<Delivery> findDeliveriesEager(Connection c, int limit, int page, String orderByColumn) throws SQLException, ParseException {
         ResultSet rs = null;
         try (PreparedStatement ps = c.prepareStatement(SELECT_DELIVERIES_EAGER)) {
@@ -224,6 +225,27 @@ public class DBManager {
             if (ps.executeUpdate() == 0) {
                 throw new DBException("Empty result of update a delivery date. Id = " + id + " delivery date = " + date);
             }
+        }
+    }
+
+    public Integer numberOfDeliveries(Connection c) throws SQLException {
+        try (ResultSet rs = c.prepareStatement(SELECT_NUMBER_OF_DELIVERIES).executeQuery()) {
+            rs.next();
+            return rs.getInt(1);
+        }
+    }
+
+    public List<City> findCities(Connection c) throws SQLException {
+        try (ResultSet rs = c.prepareStatement(SELECT_CITIES).executeQuery()) {
+            ArrayList<City> cities = new ArrayList<>();
+            while (rs.next()) {
+                cities.add(new City(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("key")
+                ));
+            }
+            return cities;
         }
     }
 

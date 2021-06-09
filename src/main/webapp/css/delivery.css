@@ -1,3 +1,6 @@
 .date {
     max-width: 170px;
 }
+th {
+    cursor: pointer;
+}

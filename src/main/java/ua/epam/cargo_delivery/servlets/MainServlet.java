@@ -18,32 +18,38 @@ import java.util.List;
 @WebServlet(name = "MainServlet", urlPatterns = "/")
 public class MainServlet extends HttpServlet {
     private final Logger log = LogManager.getLogger(MainServlet.class);
-    private final String loggedUser = "loggedUser";
+    private static final String LOGGED_USER = "loggedUser";
+    private static final int LIMIT = 5;
+    private static final String DELIVERIES = "deliveries";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("MainServlet " + req.getRequestURI());
-        initDisplayedData(req);
         initUser(req);
-        if (((User) req.getSession().getAttribute(loggedUser)).getRole() == Role.MANAGER) {
+        if (((User) req.getSession().getAttribute(LOGGED_USER)).getRole() == Role.MANAGER) {
             req.getRequestDispatcher("/manager").forward(req, resp);
-        } else {
-            req.getRequestDispatcher("/index.jsp").forward(req, resp);
+            return;
+        }
+        initDisplayedData(req);
+        setUpPagination(req);
+        req.getRequestDispatcher("/index.jsp").forward(req, resp);
+    }
+
+    private void initDisplayedData(HttpServletRequest req) {
+        if (req.getSession().getAttribute(DELIVERIES) == null) {
+            List<Delivery> deliveries = DeliveryManager.findDeliveries(LIMIT, 0);
+            req.getSession().setAttribute(DELIVERIES, deliveries);
         }
     }
 
     private void initUser(HttpServletRequest req) {
-        if (req.getSession().getAttribute(loggedUser) == null) {
-            req.getSession().setAttribute(loggedUser, new User(Role.USER));
+        if (req.getSession().getAttribute(LOGGED_USER) == null) {
+            req.getSession().setAttribute(LOGGED_USER, new User(Role.USER));
         }
     }
 
-    private void initDisplayedData(HttpServletRequest req) {
-        if (req.getSession().getAttribute("deliveries") == null) {
-            System.out.println("req.getSession().getAttribute(deliveries) = null");
-            List<Delivery> deliveries = DeliveryManager.findDeliveries(5, 0);
-            req.getSession().setAttribute("deliveries", deliveries);
-        }
-        System.out.println("result = " + req.getSession().getAttribute("deliveries"));
+    private void setUpPagination(HttpServletRequest req) {
+        req.getSession().setAttribute("numberOfPage",
+                DeliveryManager.getNumberOfPageDeliveries(LIMIT));
     }
 }
