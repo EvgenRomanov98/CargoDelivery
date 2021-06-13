@@ -21,8 +21,9 @@ public class CalculatePriceServlet extends HttpServlet {
         DeliveryDTO dto = MapBoxClient.getGeoJson(delivery.getWhence(), delivery.getWhither());
         delivery.setDistance(dto.getDistance());
         delivery.calculatePrice();
+        req.getSession().setAttribute("price", delivery.getPrice());
+        req.getSession().setAttribute("distance", delivery.getDistance());
         dto.setPrice(delivery.getPrice().toString());
-        System.out.println("DTO = " + dto);
         resp.getWriter().write(dto.toString());
     }
 }

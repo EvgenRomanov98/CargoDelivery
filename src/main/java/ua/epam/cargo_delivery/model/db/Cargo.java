@@ -1,9 +1,11 @@
 package ua.epam.cargo_delivery.model.db;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ua.epam.cargo_delivery.model.Util;
 
-import java.util.Objects;
-
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class Cargo extends Entity {
     private String description;
     private Integer weight;
@@ -27,59 +29,6 @@ public class Cargo extends Entity {
         this.weight = weight;
         this.length = length;
         this.width = width;
-        this.height = height;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Cargo cargo = (Cargo) o;
-        return Objects.equals(description, cargo.description) && Objects.equals(weight, cargo.weight) && Objects.equals(length, cargo.length) && Objects.equals(width, cargo.width) && Objects.equals(height, cargo.height);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(description, weight, length, width, height);
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
-    public Integer getLength() {
-        return length;
-    }
-
-    public void setLength(Integer length) {
-        this.length = length;
-    }
-
-    public Integer getWidth() {
-        return width;
-    }
-
-    public void setWidth(Integer width) {
-        this.width = width;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
-
-    public void setHeight(Integer height) {
         this.height = height;
     }
 

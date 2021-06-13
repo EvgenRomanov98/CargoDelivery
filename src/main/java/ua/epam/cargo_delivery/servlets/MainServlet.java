@@ -2,10 +2,8 @@ package ua.epam.cargo_delivery.servlets;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.epam.cargo_delivery.model.db.Delivery;
-import ua.epam.cargo_delivery.model.db.DeliveryManager;
-import ua.epam.cargo_delivery.model.db.Role;
-import ua.epam.cargo_delivery.model.db.User;
+import ua.epam.cargo_delivery.exceptions.AppException;
+import ua.epam.cargo_delivery.model.db.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +15,7 @@ import java.util.List;
 
 @WebServlet(name = "MainServlet", urlPatterns = "/")
 public class MainServlet extends HttpServlet {
+    private static final String AVAILABLE_REGIONS = "availableRegions";
     private final Logger log = LogManager.getLogger(MainServlet.class);
     private static final String LOGGED_USER = "loggedUser";
     private static final int LIMIT = 5;
@@ -24,7 +23,6 @@ public class MainServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("MainServlet " + req.getRequestURI());
         initUser(req);
         if (((User) req.getSession().getAttribute(LOGGED_USER)).getRole() == Role.MANAGER) {
             req.getRequestDispatcher("/manager").forward(req, resp);
@@ -32,6 +30,7 @@ public class MainServlet extends HttpServlet {
         }
         initDisplayedData(req);
         setUpPagination(req);
+        setSupportRegions(req);
         req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 
@@ -51,5 +50,11 @@ public class MainServlet extends HttpServlet {
     private void setUpPagination(HttpServletRequest req) {
         req.getSession().setAttribute("numberOfPage",
                 DeliveryManager.getNumberOfPageDeliveries(LIMIT));
+    }
+
+    private void setSupportRegions(HttpServletRequest req) {
+        if (req.getSession().getAttribute(AVAILABLE_REGIONS) == null) {
+            req.getSession().setAttribute(AVAILABLE_REGIONS, CityManager.getCities());
+        }
     }
 }

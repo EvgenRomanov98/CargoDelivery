@@ -2,22 +2,21 @@ package ua.epam.cargo_delivery.model.db;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ua.epam.cargo_delivery.model.Util;
 
 @Data
-public class City {
+@EqualsAndHashCode(callSuper = true)
+public class City extends Entity {
 
-    private Integer id;
     private String name;
-    private String key;
+    private String region;
 
-    public City() {
-    }
-
-    public City(Integer id, String name, String key) {
-        this.id = id;
+    @Builder
+    public City(Long id, String name, String region) {
+        super(id);
         this.name = name;
-        this.key = key;
+        this.region = region;
     }
 
     @Override

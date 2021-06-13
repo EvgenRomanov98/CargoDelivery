@@ -7,10 +7,10 @@ import ua.epam.cargo_delivery.model.db.City;
 import java.util.List;
 
 @Data
-public class Regions {
+public class AvailableCities {
     private List<City> availableRegions;
 
-    public Regions(List<City> availableRegions) {
+    public AvailableCities(List<City> availableRegions) {
         this.availableRegions = availableRegions;
     }
 

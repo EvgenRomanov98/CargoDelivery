@@ -1,15 +1,16 @@
 initSortTable();
 
-$(document).ready(function(){
-    $("#filterInput").on("keyup", function() {
+$(document).ready(function () {
+    $("#filterInput").on("keyup", function () {
         var value = $(this).val().toLowerCase();
-        $("#deliveryTable tbody tr").filter(function() {
+        $("#deliveryTable tbody tr").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     });
 });
 let section = document.getElementById("tableSection");
-section.style.height = section.offsetHeight + 'px'; //set fixed height table
+//set fixed height table
+section.style.height = section.offsetHeight + 'px';
 
 function calculatePrice(url) {
     console.log(url)
@@ -23,8 +24,20 @@ function calculatePrice(url) {
             height: document.getElementById("height").value
         },
         function (data) {
-            let resp = JSON.parse(data);
-            document.getElementById("price").innerHTML = 'Calculated price: ' + resp.price
+            let resp = '';
+            try {
+                resp = JSON.parse(data);
+            } catch (e) {
+                alert("Invalid input data!");
+                return;
+            }
+            console.log(resp.start)
+            console.log(resp.finish)
+            document.getElementById("price").innerHTML = 'Calculated price: ' + resp.price;
+            let inputPrice = document.getElementById("inputPrice");
+            if (inputPrice != null) {
+                inputPrice.value = resp.price;
+            }
             printRoute(resp.lngLat)
         });
 }

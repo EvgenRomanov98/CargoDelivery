@@ -2,11 +2,14 @@ package ua.epam.cargo_delivery.model.db;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.epam.cargo_delivery.exceptions.AppException;
 import ua.epam.cargo_delivery.exceptions.DBException;
+import ua.epam.cargo_delivery.model.Util;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 public class DeliveryManager {
@@ -45,7 +48,7 @@ public class DeliveryManager {
             db.rollbackConnection(c);
             throw new DBException("Save delivery failed", e);
         } finally {
-            db.closeResource(c);
+            Util.closeResource(c);
         }
     }
 
@@ -53,7 +56,15 @@ public class DeliveryManager {
         try (Connection c = db.getConnection()) {
             return db.findDeliveriesForUser(c, user, limit, page);
         } catch (SQLException | ParseException e) {
-            throw new DBException("Fail get deliveries for user", e);
+            throw new DBException("Deliveries not found", e);
+        }
+    }
+
+    public static Delivery findDeliveryForUser(long idDelivery, User user) {
+        try (Connection c = db.getConnection()) {
+            return db.findDeliveryForUser(c, idDelivery, user.getId());
+        } catch (SQLException | ParseException e) {
+            throw new DBException("Delivery nor found", e);
         }
     }
 
@@ -78,7 +89,7 @@ public class DeliveryManager {
             db.rollbackConnection(c);
             throw new DBException("Can't update status to " + status, e);
         } finally {
-            db.closeResource(c);
+            Util.closeResource(c);
         }
     }
 
@@ -105,6 +116,16 @@ public class DeliveryManager {
             return numberOfDeliveries % limit > 0 ? numberOfPage + 1 : numberOfPage;
         } catch (SQLException e) {
             throw new DBException("Can't find number of deliveries ", e);
+        }
+    }
+
+    public static List<Delivery> findDeliveriesForReport(Long fromRegion, Long toRegion, Date createDate, Date deliveryDate) {
+        try (Connection c = db.getConnection()) {
+            return db.findDeliveriesReport(c, fromRegion, toRegion, createDate, deliveryDate);
+        } catch (SQLException | ParseException e) {
+            String message = "Can't extract xls report";
+            log.error(message, e);
+            throw new AppException(message, e);
         }
     }
 }

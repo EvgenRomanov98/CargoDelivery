@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.epam.cargo_delivery.exceptions.CreateUserException;
 import ua.epam.cargo_delivery.exceptions.DBException;
 import ua.epam.cargo_delivery.exceptions.PermissionDenied;
+import ua.epam.cargo_delivery.model.Util;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -28,7 +29,7 @@ public class UserManager {
             db.rollbackConnection(c);
             throw new CreateUserException("Save user in database failed", e);
         } finally {
-            db.closeResource(c);
+            Util.closeResource(c);
         }
     }
 
@@ -48,7 +49,7 @@ public class UserManager {
             db.rollbackConnection(c);
             throw new DBException(e.getMessage(), e);
         } finally {
-            db.closeResource(c);
+            Util.closeResource(c);
         }
     }
 }

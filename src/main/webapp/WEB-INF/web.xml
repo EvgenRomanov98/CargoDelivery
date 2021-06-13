@@ -17,7 +17,6 @@
     <filter-mapping>
         <filter-name>LoggingFilter</filter-name>
         <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
 
     <welcome-file-list>

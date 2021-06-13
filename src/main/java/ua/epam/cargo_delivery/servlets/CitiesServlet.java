@@ -1,6 +1,6 @@
 package ua.epam.cargo_delivery.servlets;
 
-import ua.epam.cargo_delivery.dto.Regions;
+import ua.epam.cargo_delivery.dto.AvailableCities;
 import ua.epam.cargo_delivery.model.db.City;
 import ua.epam.cargo_delivery.model.db.CityManager;
 
@@ -25,7 +25,7 @@ public class CitiesServlet extends HttpServlet {
         String ajax = req.getHeader("x-requested-with");
         if ("XMLHttpRequest".equals(ajax)) {
             resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().write(new Regions(
+            resp.getWriter().write(new AvailableCities(
                     (List<City>) req.getSession().getAttribute(AVAILABLE_REGIONS)
             ).toString());
             return;

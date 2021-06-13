@@ -10,14 +10,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
-    <link href="<%=request.getContextPath()%>/bootstrap-5.0.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<c:url value="/bootstrap-5.0.1-dist/css/bootstrap.min.css"/>" rel="stylesheet">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.css" rel="stylesheet">
     <link href="<c:url value="/css/delivery.css"/>" rel="stylesheet">
     <link href="<c:url value="/css/map.css"/>" rel="stylesheet">
+
     <title>Index</title>
 </head>
 <body>
-<!-- Optional JavaScript; choose one of the two! -->
 <nav class="navbar sticky-top navbar-light bg-light">
     <div class="container-fluid">
         <div>
@@ -47,19 +47,42 @@
         </div>
     </div>
 </nav>
-<div class="container-fluid pt-1">
+<section class="container my-5">
+    <div class="row align-items-center">
+        <h4 class="col">We deliver cargoes in and between areas:</h4>
+        <div class="col">
+            <ul class="list-group list-group-flush">
+                <c:forEach items="${sessionScope.availableRegions}" var="region">
+                    <li class="list-group-item text-center">${region.name}</li>
+                </c:forEach>
+            </ul>
+        </div>
+    </div>
+</section>
+<div class="container-fluid">
     <div class="row">
         <div id="map" class="col"></div>
-        <%--            <pre id="info"></pre>--%>
         <form class="col container-fluid" action="<c:url value="/privateOffice"/>" method="post">
             <section class="row">
                 <div class="form-floating mb-3 col">
-                    <input name="from" class="form-control" id="from" placeholder="20;20">
+                    <input name="from" class="form-control" id="from" placeholder="Longitude,Latitude From">
                     <label for="from" style="left: auto">Longitude,Latitude From</label>
                 </div>
                 <div class="form-floating mb-3 col">
-                    <input name="to" class="form-control" id="to" placeholder="20;20">
+                    <input name="to" class="form-control" id="to" placeholder="Longitude,Latitude To">
                     <label for="to" style="left: auto">Longitude,Latitude To</label>
+                </div>
+                <label><input name="fromRegionId" id="fromRegionId" hidden></label>
+                <label><input name="toRegionId" id="toRegionId" hidden></label>
+            </section>
+            <section class="row">
+                <div class="form-floating mb-3 col">
+                    <input name="fromName" class="form-control" id="fromName" placeholder="City from">
+                    <label for="fromName" style="left: auto">City from</label>
+                </div>
+                <div class="form-floating mb-3 col">
+                    <input name="toName" class="form-control" id="toName" placeholder="City to">
+                    <label for="toName" style="left: auto">City to</label>
                 </div>
             </section>
             <section class="row">
@@ -97,6 +120,7 @@
                 </label>
             </section>
             <section class="row align-items-center pt-1">
+                <label hidden><input id="inputPrice" name="price"></label>
                 <h6 id="price" class="col-6 my-0"></h6>
                 <div class="col-6 d-flex flex-row-reverse">
                     <c:if test="${sessionScope.loggedUser.role.checkPermission(Action.CREATE_DELIVERY)}">
@@ -128,10 +152,20 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${deliveries}" var="delivery">
+        <c:forEach items="${sessionScope.deliveries}" var="delivery">
             <tr>
-                <td><c:out value="${delivery.whence}"/></td>
-                <td><c:out value="${delivery.whither}"/></td>
+                <td>
+                    <div class="d-flex flex-column">
+                        <div class="flex-row flex-wrap"><c:out value="${delivery.fromName}"/></div>
+                        <div class="flex-row flex-wrap text-muted fs-6"><c:out value="${delivery.whence}"/></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex flex-column">
+                        <div class="flex-row flex-wrap"><c:out value="${delivery.toName}"/></div>
+                        <div class="flex-row flex-wrap text-muted fs-6"><c:out value="${delivery.whither}"/></div>
+                    </div>
+                </td>
                 <td><c:out value="${delivery.distance}"/></td>
                 <td><c:out value="${delivery.price}"/></td>
             </tr>
@@ -217,11 +251,12 @@
     </div>
 </div>
 
+
 <script src="<c:url value="/bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js"/>" async></script>
-<script src="<c:url value="/js/jquery-3.6.0.min.js"/>" async></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.js"></script>
+<script src="<c:url value="/js/jquery-3.6.0.min.js"/>"></script>
 <script src="<c:url value="/js/delivery.js"/>" async></script>
 <script src="<c:url value="/js/map.js"/>" async></script>
-<%--<script src="<c:url value="/js/pagination.min.js"/>" async></script>--%>
+<script src="<c:url value="/js/pagination.min.js"/>" async></script>
 </body>
 </html>

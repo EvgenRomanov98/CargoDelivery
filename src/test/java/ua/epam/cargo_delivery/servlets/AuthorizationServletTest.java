@@ -12,7 +12,6 @@ class AuthorizationServletTest {
 
     @Test
     void doPost() {
-//        DeliveryDTO geoJson = Util.getGeoJson("35.178448,47.816173", "35.055858,48.446627");
-//        System.out.println(geoJson);
+
     }
 }

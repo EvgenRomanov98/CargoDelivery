@@ -9,10 +9,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.epam.cargo_delivery.exceptions.AppException;
 import ua.epam.cargo_delivery.model.db.Cargo;
+import ua.epam.cargo_delivery.model.db.City;
 import ua.epam.cargo_delivery.model.db.Delivery;
 import ua.epam.cargo_delivery.model.db.User;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 public class Util {
     private static final ObjectMapper om = new ObjectMapper();
@@ -52,6 +54,16 @@ public class Util {
 
     public static Delivery extractDeliveryFromReq(HttpServletRequest req) {
         Delivery delivery = new Delivery(req.getParameter("from"), req.getParameter("to"));
+        delivery.setFromName(req.getParameter("fromName"));
+        delivery.setToName(req.getParameter("toName"));
+        Optional.ofNullable(req.getParameter("fromRegionId")).ifPresent(id -> delivery.setFromRegion(City.builder()
+                .id(Long.parseLong(id))
+                .build()));
+        Optional.ofNullable(req.getParameter("toRegionId")).ifPresent(id -> delivery.setToRegion(City.builder()
+                .id(Long.parseLong(id))
+                .build()));
+        delivery.setToName(req.getParameter("toName"));
+        // TODO: 14.06.21 Optional?
         Cargo cargo = new Cargo(
                 req.getParameter("description"),
                 Integer.parseInt(req.getParameter("weight")),
@@ -61,6 +73,18 @@ public class Util {
         );
         delivery.setUser((User) req.getSession().getAttribute("loggedUser"));
         delivery.setCargo(cargo);
+        delivery.setPrice((Integer) req.getSession().getAttribute("price"));
+        delivery.setDistance((Float) req.getSession().getAttribute("distance"));
         return delivery;
+    }
+
+    public static void closeResource(AutoCloseable resource) {
+        if (resource != null) {
+            try {
+                resource.close();
+            } catch (Exception e) {
+                log.error("Fail close resource", e);
+            }
+        }
     }
 }

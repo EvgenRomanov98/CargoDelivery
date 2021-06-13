@@ -1,6 +1,8 @@
 package ua.epam.cargo_delivery.model.db;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ua.epam.cargo_delivery.exceptions.CreateUserException;
 import ua.epam.cargo_delivery.model.EncryptUtil;
 import ua.epam.cargo_delivery.model.Util;
@@ -9,6 +11,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Objects;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class User extends Entity {
     private String email;
     @JsonIgnore
@@ -73,72 +77,6 @@ public class User extends Entity {
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new IllegalStateException("Hashing error during compare to password", e);
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(email, user.email) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(name, user.name) &&
-                Objects.equals(surname, user.surname) &&
-                Objects.equals(phone, user.phone) &&
-                role == user.role;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(email, password, name, surname, phone, role);
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     @Override

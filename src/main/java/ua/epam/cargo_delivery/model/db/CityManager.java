@@ -12,7 +12,6 @@ public class CityManager {
     private static final Logger log = LogManager.getLogger(CityManager.class);
     private static final DBManager db = DBManager.getInstance();
 
-
     public static List<City> getCities() {
         try (Connection c = db.getConnection()) {
             return db.findCities(c);

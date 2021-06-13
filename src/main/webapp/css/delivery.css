@@ -1,6 +1,11 @@
 .date {
     max-width: 170px;
 }
+
 th {
     cursor: pointer;
+}
+.status-select {
+    text-align-last: center;
+    width: 120px;
 }

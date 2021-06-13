@@ -19,11 +19,14 @@ public class LoggingFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException {
         try {
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
             log.info(">>> REQUEST: {}, {}", ((HttpServletRequest) request).getRequestURI(), request.getParameterMap());
             chain.doFilter(request, response);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            ((HttpServletRequest) request).getSession().setAttribute("error", e.getMessage());
+            String userMessage = e.getMessage() == null ? "Something wrong! Please, try later" : e.getMessage();
+            ((HttpServletRequest) request).getSession().setAttribute("error", userMessage);
             ((HttpServletResponse) response).sendRedirect("error.jsp");
         }
         log.info("<<< RESPONSE: {}", ((HttpServletResponse) response).getStatus());
