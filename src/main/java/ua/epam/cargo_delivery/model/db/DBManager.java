@@ -26,7 +26,7 @@ public class DBManager {
     private static final String INSERT_CARGO = "INSERT INTO cargoes (description, weight, length, width, height) VALUES (?, ?, ?, ?, ?)";
     private static final String INSERT_DELIVERY = "INSERT INTO deliveries (whence, whither, from_name, to_name, distance, price, cargo_id, status_id, user_id, from_region_id, to_region_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_DELIVERIES_WITH_LIMIT = "SELECT id AS d_id, * " +
-            "FROM deliveries WHERE status_id != 6 ORDER BY id LIMIT ? OFFSET ?";
+            "FROM deliveries WHERE status_id != 6 AND from_name LIKE ? AND to_name LIKE ? ORDER BY id LIMIT ? OFFSET ?";
     private static final String SELECT_DELIVERIES_AND_CARGO_WITH_LIMIT_FOR_USER = "SELECT d.id AS d_id, " +
             "d.whence, d.whither, d.from_name, d.to_name, d.create_date, d.delivery_date, d.distance, d.price, d.status_id, " +
             "c.id AS c_id, c.description, c.weight, c.width, c.length, c.height " +
@@ -107,7 +107,8 @@ public class DBManager {
         }
     }
 
-    public List<Delivery> findDeliveries(Connection c, int limit, int page, String orderBy, boolean asc) throws SQLException {
+    public List<Delivery> findDeliveries(Connection c, int limit, int page, String orderBy, boolean asc,
+                                         String filterFrom, String filterTo) throws SQLException {
         ResultSet rs = null;
         page = page == 0 ? page : --page;
         String ascStr = asc ? "" : "DESC";
@@ -118,8 +119,10 @@ public class DBManager {
             sql = asc ? SELECT_DELIVERIES_WITH_LIMIT : SELECT_DELIVERIES_WITH_LIMIT.replace("ORDER BY id", "ORDER BY id DESC");
         }
         try (PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, limit);
-            ps.setInt(2, page * limit);
+            ps.setString(1, "%" + filterFrom + "%");
+            ps.setString(2, "%" + filterTo + "%");
+            ps.setInt(3, limit);
+            ps.setInt(4, page * limit);
             rs = ps.executeQuery();
             List<Delivery> deliveries = new ArrayList<>();
             while (rs.next()) {

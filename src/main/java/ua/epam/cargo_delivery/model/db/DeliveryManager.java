@@ -20,12 +20,13 @@ public class DeliveryManager {
     }
 
     public static List<Delivery> findDeliveries(int limit, int page) {
-        return findDeliveries(limit, page, "id", true);
+        return findDeliveries(limit, page, "id", true, "", "");
     }
 
-    public static List<Delivery> findDeliveries(int limit, int page, String orderBy, boolean asc) {
+    public static List<Delivery> findDeliveries(int limit, int page, String orderBy, boolean asc,
+                                                String filterFrom, String filterTo) {
         try (Connection c = db.getConnection()) {
-            return db.findDeliveries(c, limit, page, orderBy, asc);
+            return db.findDeliveries(c, limit, page, orderBy, asc, filterFrom, filterTo);
         } catch (SQLException e) {
             throw new DBException("Fail get Deliveries", e);
         }

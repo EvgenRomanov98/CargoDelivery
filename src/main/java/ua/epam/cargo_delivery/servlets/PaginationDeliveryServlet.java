@@ -20,12 +20,14 @@ public class PaginationDeliveryServlet extends HttpServlet {
     private static final String DEFAULT_ORDER_BY = "id";
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer limit = Optional.ofNullable(req.getParameter("pageSize")).filter(s -> !s.isBlank()).map(Integer::parseInt).orElse(DEFAULT_LIMIT);
         Integer page = Optional.ofNullable(req.getParameter("pageNumber")).filter(s -> !s.isBlank()).map(Integer::parseInt).orElse(DEFAULT_PAGE);
         String orderBy = Optional.ofNullable(req.getParameter("orderBy")).filter(s -> !s.isBlank()).orElse(DEFAULT_ORDER_BY);
         boolean asc = Optional.ofNullable(req.getParameter("ascending")).filter(s -> !s.isBlank()).map(Boolean::parseBoolean).orElse(true);
-        List<Delivery> deliveries = DeliveryManager.findDeliveries(limit, page, orderBy, asc);
+        String filterFrom = Optional.ofNullable(req.getParameter("filter[fromName]")).orElse("");
+        String filterTo = Optional.ofNullable(req.getParameter("filter[toName]")).orElse("");
+        List<Delivery> deliveries = DeliveryManager.findDeliveries(limit, page, orderBy, asc, filterFrom, filterTo);
         resp.getWriter().write(DeliveryDTO.builder().deliveries(deliveries).build().toString());
     }
 }

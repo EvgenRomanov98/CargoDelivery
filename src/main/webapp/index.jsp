@@ -145,11 +145,37 @@
     <table id="deliveryTable" class="table caption-top">
         <caption>List of deliveries</caption>
         <thead class="table-dark">
-        <tr>
-            <th scope="col" col="whence">From</th>
-            <th scope="col" col="whither">To</th>
-            <th class="text-center" scope="col" col="distance">Distance</th>
-            <th class="text-center" scope="col" col="price">Price</th>
+        <tr class="align-middle">
+            <th scope="col">
+                <div class="container-fluid row m-0 p-0 align-items-center">
+                    <span class="col-7" col="fromName">From</span>
+                    <div class="col">
+                        <div class="input-group input-group-sm">
+                            <label for="filterWhence" class="input-group-text">
+                                <img src="<c:url value="icons/filter.svg"/>" alt="Filter">
+                            </label>
+                            <input id="filterWhence" col="fromName" type="text" class="form-control"
+                                   placeholder="From filter by">
+                        </div>
+                    </div>
+                </div>
+            </th>
+            <th scope="col">
+                <div class="container-fluid row m-0 p-0 align-items-center">
+                    <span class="col-7" col="toName">To</span>
+                    <div class="col">
+                        <div class="input-group input-group-sm">
+                            <label for="filterWhither" class="input-group-text">
+                                <img src="<c:url value="icons/filter.svg"/>" alt="Filter">
+                            </label>
+                            <input id="filterWhither" col="toName" type="text" class="form-control"
+                                   placeholder="To filter by">
+                        </div>
+                    </div>
+                </div>
+            </th>
+            <th scope="col"><span col="distance" class="d-flex">Distance</span></th>
+            <th scope="col"><span col="price" class="d-flex">Price</span></th>
         </tr>
         </thead>
         <tbody id="data-container" class="container-fluid">
@@ -262,8 +288,8 @@
 <script>
     window.addEventListener('load', pagination());
 
-    function pagination(colName = 'id', trigger = false, asc = true) {
-        var pageSize = 5;
+    function pagination(colName = 'id', trigger = false, asc = true, filterObj = {fromName: '', toName: ''}) {
+        let pageSize = 5;
         rootLocation = $('#homeLocation').attr('href');
         let active = document.querySelector('li.active a');
         let page = active ? active.innerText : 1;
@@ -277,9 +303,11 @@
             pageNumber: page,
             className: 'paginationjs-small d-flex justify-content-end mx-5 pb-3',
             ajax: {
+                type: 'POST',
                 data: {
                     orderBy: colName,
-                    ascending: asc
+                    ascending: asc,
+                    filter: filterObj
                 }
             },
             callback: function (data, pagination) {
@@ -304,33 +332,32 @@
                         <div class="flex-row flex-wrap text-muted fs-6">` + item.whither + `</div>
                     </div>
                 </td>
-                <td class="text-center">` + item.distance + `</td>
-                <td class="text-center">` + item.price + `</td>
+                <td>` + item.distance + `</td>
+                <td>` + item.price + `</td>
             </tr>`;
             });
             return html;
         }
     }
 
-    initSortTable(false);
-    function initSortTable(asc) {
-        // const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
-        //
-        // const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
-        //         v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
-        // )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
-        //
-        // document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
-        //     const tbody = th.closest('table').querySelector('tbody');
-        //     Array.from(tbody.querySelectorAll('tr'))
-        //         .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
-        //         .forEach(tr => tbody.appendChild(tr));
-        // })));
+    initSortAndFilterTable(true);
 
-        document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+    function initSortAndFilterTable(asc) {
+        let regExp = /^(fromName|toName)$/;
+        let filterObj = {};
+        document.querySelectorAll('th span').forEach(span => span.addEventListener('click', (() => {
             asc = !asc
-            pagination(th.getAttribute('col'), true, asc);
+            pagination(span.getAttribute('col'), true, asc, filterObj);
         })));
+
+        document.querySelectorAll('th input').forEach(input => input.addEventListener('change', (() => {
+            if (!regExp.exec(input.getAttribute('col'))) {
+                return;
+            }
+            filterObj[input.getAttribute('col')] = input.value
+            pagination(input.getAttribute('col'), true, asc, filterObj);
+        })));
+
     }
 </script>
 </body>
