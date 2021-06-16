@@ -66,9 +66,10 @@
                 </td>
                 <td>${delivery.createDate}</td>
                 <td>
-                    <label onfocusout="updateDeliveryDate('<c:url value="/updateDeliveryDate"/>', ${delivery.id})">
+                    <label>
                         <input class="form-control date" type="date" id="deliveryDate-${delivery.id}"
-                               value="${delivery.deliveryDate}">
+                               value="${delivery.deliveryDate}"
+                               oninput="updateDeliveryDate('<c:url value="/updateDeliveryDate"/>', ${delivery.id})">
                     </label>
                 </td>
                 <td>${delivery.distance}</td>

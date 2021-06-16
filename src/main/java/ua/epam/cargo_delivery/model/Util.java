@@ -56,14 +56,13 @@ public class Util {
         Delivery delivery = new Delivery(req.getParameter("from"), req.getParameter("to"));
         delivery.setFromName(req.getParameter("fromName"));
         delivery.setToName(req.getParameter("toName"));
-        Optional.ofNullable(req.getParameter("fromRegionId")).ifPresent(id -> delivery.setFromRegion(City.builder()
+        Optional.ofNullable(req.getParameter("fromRegionId")).filter(s -> !s.isBlank()).ifPresent(id -> delivery.setFromRegion(City.builder()
                 .id(Long.parseLong(id))
                 .build()));
-        Optional.ofNullable(req.getParameter("toRegionId")).ifPresent(id -> delivery.setToRegion(City.builder()
+        Optional.ofNullable(req.getParameter("toRegionId")).filter(s -> !s.isBlank()).ifPresent(id -> delivery.setToRegion(City.builder()
                 .id(Long.parseLong(id))
                 .build()));
         delivery.setToName(req.getParameter("toName"));
-        // TODO: 14.06.21 Optional?
         Cargo cargo = new Cargo(
                 req.getParameter("description"),
                 Integer.parseInt(req.getParameter("weight")),

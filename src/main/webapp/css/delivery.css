@@ -5,7 +5,12 @@
 th {
     cursor: pointer;
 }
+
 .status-select {
     text-align-last: center;
     width: 120px;
+}
+
+.table-tb-width-40 {
+    width: 40%;
 }

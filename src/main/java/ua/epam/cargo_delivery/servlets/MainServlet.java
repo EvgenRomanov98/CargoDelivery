@@ -1,8 +1,5 @@
 package ua.epam.cargo_delivery.servlets;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import ua.epam.cargo_delivery.exceptions.AppException;
 import ua.epam.cargo_delivery.model.db.*;
 
 import javax.servlet.ServletException;
@@ -16,10 +13,10 @@ import java.util.List;
 @WebServlet(name = "MainServlet", urlPatterns = "/")
 public class MainServlet extends HttpServlet {
     private static final String AVAILABLE_REGIONS = "availableRegions";
-    private final Logger log = LogManager.getLogger(MainServlet.class);
     private static final String LOGGED_USER = "loggedUser";
     private static final int LIMIT = 5;
     private static final String DELIVERIES = "deliveries";
+    private static final String TOTAL_NUMBER = "totalNumber";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -48,8 +45,7 @@ public class MainServlet extends HttpServlet {
     }
 
     private void setUpPagination(HttpServletRequest req) {
-        req.getSession().setAttribute("numberOfPage",
-                DeliveryManager.getNumberOfPageDeliveries(LIMIT));
+        req.getSession().setAttribute(TOTAL_NUMBER, DeliveryManager.getTotalNumber());
     }
 
     private void setSupportRegions(HttpServletRequest req) {

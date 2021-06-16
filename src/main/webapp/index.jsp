@@ -14,6 +14,7 @@
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.css" rel="stylesheet">
     <link href="<c:url value="/css/delivery.css"/>" rel="stylesheet">
     <link href="<c:url value="/css/map.css"/>" rel="stylesheet">
+    <link href="<c:url value="/css/pagination.css"/>" rel="stylesheet">
 
     <title>Index</title>
 </head>
@@ -141,37 +142,38 @@
 <section id="tableSection">
     <input type="text" id="filterInput" placeholder="Search for value.."
            title="Enter text to filter table">
-    <table id="deliveryTable" class="table">
+    <table id="deliveryTable" class="table caption-top">
         <caption>List of deliveries</caption>
         <thead class="table-dark">
         <tr>
-            <th scope="col">From</th>
-            <th scope="col">To</th>
-            <th scope="col">Distance</th>
-            <th scope="col">Price</th>
+            <th scope="col" col="whence">From</th>
+            <th scope="col" col="whither">To</th>
+            <th class="text-center" scope="col" col="distance">Distance</th>
+            <th class="text-center" scope="col" col="price">Price</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="data-container" class="container-fluid">
         <c:forEach items="${sessionScope.deliveries}" var="delivery">
             <tr>
-                <td>
+                <td class="table-tb-width-40">
                     <div class="d-flex flex-column">
-                        <div class="flex-row flex-wrap"><c:out value="${delivery.fromName}"/></div>
-                        <div class="flex-row flex-wrap text-muted fs-6"><c:out value="${delivery.whence}"/></div>
+                        <div class="flex-row flex-wrap">${delivery.fromName}</div>
+                        <div class="flex-row flex-wrap text-muted fs-6">${delivery.whence}</div>
                     </div>
                 </td>
-                <td>
+                <td class="table-tb-width-40">
                     <div class="d-flex flex-column">
-                        <div class="flex-row flex-wrap"><c:out value="${delivery.toName}"/></div>
-                        <div class="flex-row flex-wrap text-muted fs-6"><c:out value="${delivery.whither}"/></div>
+                        <div class="flex-row flex-wrap">${delivery.toName}</div>
+                        <div class="flex-row flex-wrap text-muted fs-6">${delivery.whither}</div>
                     </div>
                 </td>
-                <td><c:out value="${delivery.distance}"/></td>
-                <td><c:out value="${delivery.price}"/></td>
+                <td class="text-center">${delivery.distance}</td>
+                <td class="text-center">${delivery.price} UAH</td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
+    <div id="pagination-container"></div>
 </section>
 
 <!-- Modal -->
@@ -251,12 +253,85 @@
     </div>
 </div>
 
-
 <script src="<c:url value="/bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js"/>" async></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.js"></script>
 <script src="<c:url value="/js/jquery-3.6.0.min.js"/>"></script>
 <script src="<c:url value="/js/delivery.js"/>" async></script>
 <script src="<c:url value="/js/map.js"/>" async></script>
-<script src="<c:url value="/js/pagination.min.js"/>" async></script>
+<script src="<c:url value="/js/pagination.js"/>"></script>
+<script>
+    window.addEventListener('load', pagination());
+
+    function pagination(colName = 'id', trigger = false, asc = true) {
+        var pageSize = 5;
+        rootLocation = $('#homeLocation').attr('href');
+        let active = document.querySelector('li.active a');
+        let page = active ? active.innerText : 1;
+        let url = rootLocation + 'paginationDelivery';
+        $('#pagination-container').pagination({
+            dataSource: url,
+            locator: 'deliveries',
+            triggerPagingOnInit: trigger,
+            totalNumber: ${sessionScope.totalNumber},
+            pageSize: pageSize,
+            pageNumber: page,
+            className: 'paginationjs-small d-flex justify-content-end mx-5 pb-3',
+            ajax: {
+                data: {
+                    orderBy: colName,
+                    ascending: asc
+                }
+            },
+            callback: function (data, pagination) {
+                var html = templating(data);
+                $('#data-container').html(html);
+            }
+        })
+
+        function templating(data) {
+            let html = '';
+            $.each(data, function (index, item) {
+                html += `<tr>
+                <td class="table-tb-width-40">
+                    <div class="d-flex flex-column">
+                        <div class="flex-row flex-wrap">` + item.fromName + `</div>
+                        <div class="flex-row flex-wrap text-muted fs-6">` + item.whence + `</div>
+                    </div>
+                </td>
+                <td class="table-tb-width-40">
+                    <div class="d-flex flex-column">
+                        <div class="flex-row flex-wrap">` + item.toName + `</div>
+                        <div class="flex-row flex-wrap text-muted fs-6">` + item.whither + `</div>
+                    </div>
+                </td>
+                <td class="text-center">` + item.distance + `</td>
+                <td class="text-center">` + item.price + `</td>
+            </tr>`;
+            });
+            return html;
+        }
+    }
+
+    initSortTable(false);
+    function initSortTable(asc) {
+        // const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+        //
+        // const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
+        //         v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+        // )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+        //
+        // document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+        //     const tbody = th.closest('table').querySelector('tbody');
+        //     Array.from(tbody.querySelectorAll('tr'))
+        //         .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+        //         .forEach(tr => tbody.appendChild(tr));
+        // })));
+
+        document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+            asc = !asc
+            pagination(th.getAttribute('col'), true, asc);
+        })));
+    }
+</script>
 </body>
 </html>

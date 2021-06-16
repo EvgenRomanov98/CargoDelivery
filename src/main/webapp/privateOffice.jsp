@@ -120,8 +120,8 @@
                            value="${param.to}">
                     <label for="to" style="left: auto">Longitude,Latitude To</label>
                 </div>
-                <label><input name="fromRegionId" id="fromRegionId" hidden></label>
-                <label><input name="toRegionId" id="toRegionId" hidden></label>
+                <label><input name="fromRegionId" id="fromRegionId" value="${param.fromRegionId}" hidden></label>
+                <label><input name="toRegionId" id="toRegionId" value="${param.toRegionId}" hidden></label>
             </section>
             <section class="row">
                 <div class="form-floating mb-3 col">

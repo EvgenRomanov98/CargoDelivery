@@ -9,15 +9,14 @@ import ua.epam.cargo_delivery.model.db.Delivery;
 import ua.epam.cargo_delivery.model.db.DeliveryManager;
 
 import java.io.ByteArrayOutputStream;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
 public class XlsReport {
     private static final Logger log = LogManager.getLogger(XlsReport.class);
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static ByteArrayOutputStream genXls(String fromRegion, String toRegion, String createDateStr, String deliveryDateStr) {
         try (Workbook book = new HSSFWorkbook();
@@ -29,10 +28,10 @@ public class XlsReport {
             Long toRegionId = Optional.ofNullable(toRegion).filter(s -> !s.isBlank())
                     .map(Long::parseLong)
                     .orElse(null);
-            Date createDate = createDateStr == null || createDateStr.isBlank() ? null :
-                    DATE_FORMAT.parse(createDateStr);
-            Date deliveryDate = deliveryDateStr == null || deliveryDateStr.isBlank() ? null :
-                    DATE_FORMAT.parse(deliveryDateStr);
+            LocalDate createDate = createDateStr == null || createDateStr.isBlank() ? null :
+                    LocalDate.parse(createDateStr, DATE_FORMAT);
+            LocalDate deliveryDate = deliveryDateStr == null || deliveryDateStr.isBlank() ? null :
+                    LocalDate.parse(deliveryDateStr, DATE_FORMAT);
 
             List<Delivery> deliveries = DeliveryManager.findDeliveriesForReport(fromRegionId, toRegionId,
                     createDate, deliveryDate);
@@ -67,6 +66,8 @@ public class XlsReport {
             }
             book.write(baos);
             return baos;
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             String message = "Can't create xls report";
             log.error(message, e);

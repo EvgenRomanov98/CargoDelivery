@@ -104,7 +104,6 @@ $(document).ready(function () {
         availableRegionPattern = availableRegionPattern.slice(0, availableRegionPattern.length - 1);
         availableRegionPattern = new RegExp(availableRegionPattern);
         availableRegion = resp.availableRegions;
-        console.log(availableRegionPattern);
     });
 });
 

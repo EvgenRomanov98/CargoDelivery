@@ -8,8 +8,7 @@ import ua.epam.cargo_delivery.model.Util;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class DeliveryManager {
@@ -21,9 +20,13 @@ public class DeliveryManager {
     }
 
     public static List<Delivery> findDeliveries(int limit, int page) {
+        return findDeliveries(limit, page, "id", true);
+    }
+
+    public static List<Delivery> findDeliveries(int limit, int page, String orderBy, boolean asc) {
         try (Connection c = db.getConnection()) {
-            return db.findDeliveries(c, limit, page, "id");
-        } catch (SQLException | ParseException e) {
+            return db.findDeliveries(c, limit, page, orderBy, asc);
+        } catch (SQLException e) {
             throw new DBException("Fail get Deliveries", e);
         }
     }
@@ -31,7 +34,7 @@ public class DeliveryManager {
     public static List<Delivery> findDeliveriesWithCargoes(int limit, int page, String orderByColumn) {
         try (Connection c = db.getConnection()) {
             return db.findDeliveriesEager(c, limit, page, orderByColumn);
-        } catch (SQLException | ParseException e) {
+        } catch (SQLException e) {
             throw new DBException("Fail get Deliveries", e);
         }
     }
@@ -55,7 +58,7 @@ public class DeliveryManager {
     public static List<Delivery> findDeliveriesForUser(int limit, int page, User user) {
         try (Connection c = db.getConnection()) {
             return db.findDeliveriesForUser(c, user, limit, page);
-        } catch (SQLException | ParseException e) {
+        } catch (SQLException e) {
             throw new DBException("Deliveries not found", e);
         }
     }
@@ -63,7 +66,7 @@ public class DeliveryManager {
     public static Delivery findDeliveryForUser(long idDelivery, User user) {
         try (Connection c = db.getConnection()) {
             return db.findDeliveryForUser(c, idDelivery, user.getId());
-        } catch (SQLException | ParseException e) {
+        } catch (SQLException e) {
             throw new DBException("Delivery nor found", e);
         }
     }
@@ -96,7 +99,7 @@ public class DeliveryManager {
     public static List<Delivery> findDeliveriesWithStatus(DeliveryStatus status, User user) {
         try (Connection c = db.getConnection()) {
             return db.findDeliveriesWithStatus(c, status, user);
-        } catch (SQLException | ParseException e) {
+        } catch (SQLException e) {
             throw new DBException("Fail get deliveries for user with status = " + status, e);
         }
     }
@@ -109,21 +112,22 @@ public class DeliveryManager {
         }
     }
 
-    public static Integer getNumberOfPageDeliveries(int limit) {
+    public static Integer getTotalNumber() {
         try (Connection c = db.getConnection()) {
-            Integer numberOfDeliveries = db.numberOfDeliveries(c);
-            int numberOfPage = numberOfDeliveries / limit;
-            return numberOfDeliveries % limit > 0 ? numberOfPage + 1 : numberOfPage;
+            return db.numberOfDeliveries(c);
         } catch (SQLException e) {
             throw new DBException("Can't find number of deliveries ", e);
         }
     }
 
-    public static List<Delivery> findDeliveriesForReport(Long fromRegion, Long toRegion, Date createDate, Date deliveryDate) {
+    public static List<Delivery> findDeliveriesForReport(Long fromRegion, Long toRegion, LocalDate createDate, LocalDate deliveryDate) {
         try (Connection c = db.getConnection()) {
             return db.findDeliveriesReport(c, fromRegion, toRegion, createDate, deliveryDate);
-        } catch (SQLException | ParseException e) {
-            String message = "Can't extract xls report";
+        } catch (DBException e) {
+            log.warn(e.getMessage(), e);
+            throw new AppException(e.getMessage(), e);
+        } catch (Exception e) {
+            String message = "Failed get deliveries for report";
             log.error(message, e);
             throw new AppException(message, e);
         }
