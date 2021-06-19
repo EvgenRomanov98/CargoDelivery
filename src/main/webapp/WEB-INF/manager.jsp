@@ -9,6 +9,7 @@
     <!-- Bootstrap CSS -->
     <link href="<c:url value="/bootstrap-5.0.1-dist/css/bootstrap.min.css"/>" rel="stylesheet">
     <link href="<c:url value="/css/delivery.css"/>" rel="stylesheet">
+    <link rel="icon" href='<c:url value="/favicon.ico" />' type="image/x-icon">
     <title>Manager</title>
 </head>
 <body>

@@ -6,12 +6,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static ua.epam.cargo_delivery.model.Action.CREATE_DELIVERY;
+import static ua.epam.cargo_delivery.model.Action.*;
 
 public enum Role {
-    USER(1),
-    AUTHORIZE_USER(2, CREATE_DELIVERY),
-    MANAGER(3, CREATE_DELIVERY);
+    USER(1, ROOT, AUTH, REGISTRATION, CALCULATE_PRICE, REGIONS, PAGINATION),
+    AUTHORIZE_USER(2, ROOT, CALCULATE_PRICE, REGIONS,
+            PAGINATION, CREATE_DELIVERY, PRIVATE_OFFICE, PAY, RECEIPT, SIGN_OUT),
+    MANAGER(3, ROOT, MANAGEMENT, PAGINATION, SIGN_OUT, UPDATE_DELIVERY_DATE, CHANGE_STATUS, XLS);
 
     private final int id;
     private final Set<Action> actions = new HashSet<>();

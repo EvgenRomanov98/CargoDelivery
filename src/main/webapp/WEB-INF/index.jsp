@@ -15,8 +15,8 @@
     <link href="<c:url value="/css/delivery.css"/>" rel="stylesheet">
     <link href="<c:url value="/css/map.css"/>" rel="stylesheet">
     <link href="<c:url value="/css/pagination.css"/>" rel="stylesheet">
-
-    <title>Index</title>
+    <link rel="icon" href='<c:url value="/favicon.ico" />' type="image/x-icon">
+    <title>Main</title>
 </head>
 <body>
 <nav class="navbar sticky-top navbar-light bg-light">
@@ -140,8 +140,6 @@
     </div>
 </div>
 <section id="tableSection">
-    <input type="text" id="filterInput" placeholder="Search for value.."
-           title="Enter text to filter table">
     <table id="deliveryTable" class="table caption-top">
         <caption>List of deliveries</caption>
         <thead class="table-dark">
@@ -152,7 +150,7 @@
                     <div class="col">
                         <div class="input-group input-group-sm">
                             <label for="filterWhence" class="input-group-text">
-                                <img src="<c:url value="icons/filter.svg"/>" alt="Filter">
+                                <img src="<c:url value="/icons/filter.svg"/>" alt="Filter">
                             </label>
                             <input id="filterWhence" col="fromName" type="text" class="form-control"
                                    placeholder="From filter by">
@@ -166,7 +164,7 @@
                     <div class="col">
                         <div class="input-group input-group-sm">
                             <label for="filterWhither" class="input-group-text">
-                                <img src="<c:url value="icons/filter.svg"/>" alt="Filter">
+                                <img src="<c:url value="/icons/filter.svg"/>" alt="Filter">
                             </label>
                             <input id="filterWhither" col="toName" type="text" class="form-control"
                                    placeholder="To filter by">
@@ -193,8 +191,8 @@
                         <div class="flex-row flex-wrap text-muted fs-6">${delivery.whither}</div>
                     </div>
                 </td>
-                <td class="text-center">${delivery.distance}</td>
-                <td class="text-center">${delivery.price} UAH</td>
+                <td>${delivery.distance}</td>
+                <td>${delivery.price} UAH</td>
             </tr>
         </c:forEach>
         </tbody>
@@ -256,12 +254,12 @@
                 </div>
                 <div class="form-floating">
                     <input name="phone" type="tel" pattern="(\+38)?(0\d{9})" required class="form-control" id="phone"
-                           placeholder="+380961111111 or 0661111111">
+                           placeholder="+380961111111 or 0661111111" title="For example:+380961111111 or 0661111111">
                     <label for="phone">Phone number</label>
                 </div>
                 <div class="form-floating">
                     <input name="email" type="email" required class="form-control" id="email"
-                           placeholder="name@example.com">
+                           placeholder="name@example.com" pattern="^\S+@\S+\.\S+$">
                     <label for="email">Email address</label>
                 </div>
                 <div class="form-floating">

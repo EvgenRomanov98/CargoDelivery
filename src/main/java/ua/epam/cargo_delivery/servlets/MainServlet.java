@@ -20,7 +20,6 @@ public class MainServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        initUser(req);
         if (((User) req.getSession().getAttribute(LOGGED_USER)).getRole() == Role.MANAGER) {
             req.getRequestDispatcher("/manager").forward(req, resp);
             return;
@@ -28,19 +27,13 @@ public class MainServlet extends HttpServlet {
         initDisplayedData(req);
         setUpPagination(req);
         setSupportRegions(req);
-        req.getRequestDispatcher("/index.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/index.jsp").forward(req, resp);
     }
 
     private void initDisplayedData(HttpServletRequest req) {
         if (req.getSession().getAttribute(DELIVERIES) == null) {
             List<Delivery> deliveries = DeliveryManager.findDeliveries(LIMIT, 0);
             req.getSession().setAttribute(DELIVERIES, deliveries);
-        }
-    }
-
-    private void initUser(HttpServletRequest req) {
-        if (req.getSession().getAttribute(LOGGED_USER) == null) {
-            req.getSession().setAttribute(LOGGED_USER, new User(Role.USER));
         }
     }
 

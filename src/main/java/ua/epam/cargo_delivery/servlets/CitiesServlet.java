@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "CitiesServlet", urlPatterns = "/availableRegion")
+@WebServlet(name = "CitiesServlet", urlPatterns = "/availableRegions")
 public class CitiesServlet extends HttpServlet {
     private static final String AVAILABLE_REGIONS = "availableRegions";
 

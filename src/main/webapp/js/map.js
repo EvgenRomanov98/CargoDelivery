@@ -1,6 +1,6 @@
 var rootLocation;
 var availableRegionPattern = '';
-var availableRegion = '';
+var availableRegions = '';
 
 var idRoute = 'route';
 mapboxgl.accessToken = 'pk.eyJ1IjoiZXZyb205OCIsImEiOiJja3BteWc2eTMwNnlrMnVudXFsZjhhdW44In0.IQYTsD8Zi1M2RVxqyB8-Fw';
@@ -87,23 +87,23 @@ function extractLocationName(features) {
 }
 
 function extractRegionId(region) {
-    for (let i = 0; i < availableRegion.length; i++) {
-        if (availableRegion[i].name === region || availableRegion[i].region === region) {
-            return availableRegion[i].id;
+    for (let i = 0; i < availableRegions.length; i++) {
+        if (availableRegions[i].name === region || availableRegions[i].region === region) {
+            return availableRegions[i].id;
         }
     }
 }
 
 $(document).ready(function () {
     rootLocation = $('#homeLocation').attr('href');
-    $.get(rootLocation + 'availableRegion', {}, function (resp) {
+    $.get(rootLocation + 'availableRegions', {}, function (resp) {
         resp = JSON.parse(resp);
         resp.availableRegions.forEach(
             city => availableRegionPattern += city.region + '|' + city.name + '|'
         )
         availableRegionPattern = availableRegionPattern.slice(0, availableRegionPattern.length - 1);
         availableRegionPattern = new RegExp(availableRegionPattern);
-        availableRegion = resp.availableRegions;
+        availableRegions = resp.availableRegions;
     });
 });
 

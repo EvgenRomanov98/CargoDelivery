@@ -32,6 +32,6 @@ public class PrivateOfficeServlet extends HttpServlet {
         List<Delivery> deliveriesForPay = DeliveryManager.findDeliveriesWithStatus(DeliveryStatus.APPROVED, user);
         req.getSession().setAttribute("deliveriesForPay", deliveriesForPay);
         req.setAttribute("commonPrice", deliveriesForPay.stream().map(Delivery::getPrice).reduce(Integer::sum).orElse(null));
-        req.getRequestDispatcher("/privateOffice.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/privateOffice.jsp").forward(req, resp);
     }
 }
