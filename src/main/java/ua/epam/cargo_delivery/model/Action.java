@@ -7,7 +7,8 @@ public enum Action {
     REGIONS("/availableRegions"), CREATE_DELIVERY("/createDelivery"), MANAGEMENT("/manager"),
     PAGINATION("/paginationDelivery"), PAY("/pay"), PRIVATE_OFFICE("/privateOffice"),
     RECEIPT("/getReceipt"), REGISTRATION("/registration"), SIGN_OUT("/signOut"),
-    UPDATE_DELIVERY_DATE("/updateDeliveryDate"), CHANGE_STATUS("/changeStatus"), XLS("/getReport");
+    UPDATE_DELIVERY_DATE("/updateDeliveryDate"), CHANGE_STATUS("/changeStatus"), XLS("/getReport"),
+    VALIDATE("/validate");
 
     private final String endpoint;
 

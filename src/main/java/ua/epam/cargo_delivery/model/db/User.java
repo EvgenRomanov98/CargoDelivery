@@ -1,6 +1,8 @@
 package ua.epam.cargo_delivery.model.db;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import ua.epam.cargo_delivery.exceptions.CreateUserException;
@@ -9,10 +11,11 @@ import ua.epam.cargo_delivery.model.Util;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Objects;
 
 @Data
+@Builder()
 @EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
 public class User extends Entity {
     private String email;
     @JsonIgnore

@@ -2,6 +2,7 @@ package ua.epam.cargo_delivery.model.db;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.epam.cargo_delivery.exceptions.AppException;
 import ua.epam.cargo_delivery.exceptions.CreateUserException;
 import ua.epam.cargo_delivery.exceptions.DBException;
 import ua.epam.cargo_delivery.exceptions.PermissionDenied;
@@ -19,17 +20,10 @@ public class UserManager {
     }
 
     public static void saveUser(User user) {
-        Connection c = null;
-        try {
-            c = db.getConnection();
-            log.trace("User for save = {}", user);
+        try (Connection c = db.getConnection()) {
             db.insertUser(c, user);
-            log.trace("Stored user = {}", user);
         } catch (SQLException e) {
-            db.rollbackConnection(c);
-            throw new CreateUserException("Save user in database failed", e);
-        } finally {
-            Util.closeResource(c);
+            throw new CreateUserException("Create user failed", e);
         }
     }
 
@@ -50,6 +44,28 @@ public class UserManager {
             throw new DBException(e.getMessage(), e);
         } finally {
             Util.closeResource(c);
+        }
+    }
+
+    public static boolean findEmail(String email) {
+        try (Connection c = db.getConnection()) {
+            db.findUser(c, User.builder().email(email).build());
+            return true;
+        } catch (SQLException e) {
+            throw new AppException("Find user by email failed", e);
+        } catch (DBException e) {
+            return false;
+        }
+    }
+
+    public static boolean findPhone(String phone) {
+        try (Connection c = db.getConnection()) {
+            db.findUserByPhone(c, User.builder().phone(phone).build());
+            return true;
+        } catch (SQLException e) {
+            throw new AppException("Find user by phone failed", e);
+        } catch (DBException e) {
+            return false;
         }
     }
 }

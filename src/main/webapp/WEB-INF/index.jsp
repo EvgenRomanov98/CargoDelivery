@@ -172,8 +172,8 @@
                     </div>
                 </div>
             </th>
-            <th scope="col"><span col="distance" class="d-flex">Distance</span></th>
-            <th scope="col"><span col="price" class="d-flex">Price</span></th>
+            <th scope="col"><span col="distance" class="d-flex">Distance, m</span></th>
+            <th scope="col"><span col="price" class="d-flex">Price, UAH</span></th>
         </tr>
         </thead>
         <tbody id="data-container" class="container-fluid">
@@ -192,7 +192,7 @@
                     </div>
                 </td>
                 <td>${delivery.distance}</td>
-                <td>${delivery.price} UAH</td>
+                <td>${delivery.price}</td>
             </tr>
         </c:forEach>
         </tbody>
@@ -212,14 +212,14 @@
             <form action="authorization" method="POST" class="modal-body">
 
                 <div class="form-floating">
-                    <input name="email" type="email" class="form-control" id="floatingInput"
-                           placeholder="name@example.com">
-                    <label for="floatingInput">Email address</label>
+                    <input name="email" type="email" class="form-control" id="authEmail"
+                           placeholder="name@example.com" pattern="^\S+@\S+\.\S+$" required>
+                    <label for="authEmail">Email address</label>
                 </div>
                 <div class="form-floating">
-                    <input name="password" type="password" class="form-control" id="floatingPassword"
-                           placeholder="Password">
-                    <label for="floatingPassword">Password</label>
+                    <input name="password" type="password" class="form-control" id="authPassword"
+                           placeholder="Password" required>
+                    <label for="authPassword">Password</label>
                 </div>
 
                 <div class="modal-footer">
@@ -244,32 +244,41 @@
 
                 <div class="form-floating">
                     <input name="name" class="form-control" id="name"
-                           placeholder="Name">
+                           placeholder="Name" required>
                     <label for="name">Name</label>
                 </div>
                 <div class="form-floating">
                     <input name="surname" class="form-control" id="surname"
-                           placeholder="Surname">
+                           placeholder="Surname" required>
                     <label for="surname">Surname</label>
                 </div>
                 <div class="form-floating">
                     <input name="phone" type="tel" pattern="(\+38)?(0\d{9})" required class="form-control" id="phone"
-                           placeholder="+380961111111 or 0661111111" title="For example:+380961111111 or 0661111111">
+                           placeholder="+380961111111 or 0661111111" title="For example:+380961111111 or 0661111111"
+                           onchange="checkUniquePhone('<c:url value="/validate"/>')">
                     <label for="phone">Phone number</label>
                 </div>
                 <div class="form-floating">
                     <input name="email" type="email" required class="form-control" id="email"
-                           placeholder="name@example.com" pattern="^\S+@\S+\.\S+$">
+                           placeholder="name@example.com"
+                           pattern="^\S+@\S+\.\S+$" onchange="checkUniqueEmail('<c:url value="/validate"/>')">
                     <label for="email">Email address</label>
                 </div>
                 <div class="form-floating">
-                    <input name="password" type="password" class="form-control" id="password"
-                           placeholder="Password">
-                    <label for="password">Password</label>
+                    <input name="password" type="password" class="form-control" id="registerPassword"
+                           placeholder="Password" required>
+                    <label for="registerPassword">Password</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="passwordCheck"
+                           placeholder="Password" required>
+                    <label for="passwordCheck">Repeat password</label>
                 </div>
 
                 <div class="modal-footer">
-                    <button class="w-100 btn btn-lg btn-success" type="submit">Sign up</button>
+                    <button class="w-100 btn btn-lg btn-success" type="submit"
+                            onclick="return validateForm();">Sign up
+                    </button>
                 </div>
 
             </form>
@@ -283,6 +292,7 @@
 <script src="<c:url value="/js/delivery.js"/>" async></script>
 <script src="<c:url value="/js/map.js"/>" async></script>
 <script src="<c:url value="/js/pagination.js"/>"></script>
+<script src="<c:url value="/js/index.js"/>" async></script>
 <script>
     window.addEventListener('load', pagination());
 

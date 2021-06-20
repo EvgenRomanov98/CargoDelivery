@@ -23,6 +23,7 @@ public class DBManager {
     private static final String INSERT_USER = "INSERT INTO users (email, password, role_id, name, surname, phone) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SELECT_USER = "SELECT id AS u_id, email, password, name, surname, phone, role_id " +
             "FROM users where email = ?";
+    private static final String SELECT_USER_BY_PHONE = "SELECT id AS u_id, * from users where phone = ?";
     private static final String INSERT_CARGO = "INSERT INTO cargoes (description, weight, length, width, height) VALUES (?, ?, ?, ?, ?)";
     private static final String INSERT_DELIVERY = "INSERT INTO deliveries (whence, whither, from_name, to_name, distance, price, cargo_id, status_id, user_id, from_region_id, to_region_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_DELIVERIES_WITH_LIMIT = "SELECT id AS d_id, * " +
@@ -100,6 +101,20 @@ public class DBManager {
             rs = ps.executeQuery();
             if (!rs.next()) {
                 throw new DBException("User with email " + user.getEmail() + " not found");
+            }
+            return extractUser(rs);
+        } finally {
+            Util.closeResource(rs);
+        }
+    }
+
+    public User findUserByPhone(Connection c, User user) throws SQLException {
+        ResultSet rs = null;
+        try (PreparedStatement ps = c.prepareStatement(SELECT_USER_BY_PHONE)) {
+            ps.setString(1, user.getPhone());
+            rs = ps.executeQuery();
+            if (!rs.next()) {
+                throw new DBException("User with phone " + user.getPhone() + " not found");
             }
             return extractUser(rs);
         } finally {
