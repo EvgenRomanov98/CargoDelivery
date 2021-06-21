@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<%@ page import="ua.epam.cargo_delivery.model.db.User" %>
-<%@ page import="java.security.Permissions" %>
 <%@ page import="ua.epam.cargo_delivery.model.Action" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="d" uri="http://cargo_delivery.epam.ua" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="tf" %>
+
 <fmt:setLocale value="${param.lang == null ? 'en' : param.lang}"/>
 <fmt:setBundle basename="messages"/>
+<c:set scope="page" value="${param.lang == null ? 'en' : param.lang}" var="lang"/>
 <html lang="${param.lang == null ? 'en' : param.lang}">
 <head>
     <!-- Required meta tags -->
@@ -55,14 +57,15 @@
                     <fmt:message key="registration"/>
                 </button>
             </c:if>
-            <c:if test="${sessionScope.loggedUser.role != 'USER'}">
-                <a href="<c:url value="/privateOffice"/>" class="btn btn-outline-info btn-sm">
-                        ${loggedUser.name} ${loggedUser.surname}
-                </a>
-                <a href="<c:url value="/signOut"/>" class="btn btn-outline-dark btn-sm">
-                    Sign out
-                </a>
-            </c:if>
+            <%--            <c:if test="${sessionScope.loggedUser.role != 'USER'}">--%>
+            <%--                <a href="<c:url value="/privateOffice"/>" class="btn btn-outline-info btn-sm">--%>
+            <%--                        ${loggedUser.name} ${loggedUser.surname}--%>
+            <%--                </a>--%>
+            <%--                <a href="<c:url value="/signOut"/>" class="btn btn-outline-dark btn-sm">--%>
+            <%--                    <fmt:message key="sign.out"/>--%>
+            <%--                </a>--%>
+            <%--            </c:if>--%>
+            <tf:auth/>
         </div>
     </div>
 </nav>
@@ -72,7 +75,7 @@
         <div class="col">
             <ul class="list-group list-group-flush">
                 <c:forEach items="${sessionScope.availableRegions}" var="region">
-                    <li class="list-group-item text-center"><fmt:message key="${region.localeKey}"/></li>
+                    <li class="list-group-item text-center"><d:region/></li>
                 </c:forEach>
             </ul>
         </div>
@@ -96,7 +99,8 @@
             </section>
             <section class="row">
                 <div class="form-floating mb-3 col">
-                    <input name="fromName" class="form-control" id="fromName" placeholder="<fmt:message key="address.from"/>">
+                    <input name="fromName" class="form-control" id="fromName"
+                           placeholder="<fmt:message key="address.from"/>">
                     <label for="fromName" style="left: auto"><fmt:message key="address.from"/></label>
                 </div>
                 <div class="form-floating mb-3 col">
