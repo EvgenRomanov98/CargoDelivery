@@ -20,7 +20,6 @@ public class CitiesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getSession().getAttribute(AVAILABLE_REGIONS) == null) {
             req.getSession().setAttribute(AVAILABLE_REGIONS, CityManager.getCities());
-            System.out.println("set in session availableRegions");
         }
         String ajax = req.getHeader("x-requested-with");
         if ("XMLHttpRequest".equals(ajax)) {

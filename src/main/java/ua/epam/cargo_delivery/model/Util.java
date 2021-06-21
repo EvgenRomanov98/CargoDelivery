@@ -62,7 +62,6 @@ public class Util {
         Optional.ofNullable(req.getParameter("toRegionId")).filter(s -> !s.isBlank()).ifPresent(id -> delivery.setToRegion(City.builder()
                 .id(Long.parseLong(id))
                 .build()));
-        delivery.setToName(req.getParameter("toName"));
         Cargo cargo = new Cargo(
                 req.getParameter("description"),
                 Integer.parseInt(req.getParameter("weight")),

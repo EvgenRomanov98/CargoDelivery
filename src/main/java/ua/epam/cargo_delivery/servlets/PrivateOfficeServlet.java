@@ -25,13 +25,13 @@ public class PrivateOfficeServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("PrivateOfficeServlet set userDeliveries");
         User user = (User) req.getSession().getAttribute("loggedUser");
         req.setAttribute("userDeliveries",
                 DeliveryManager.findDeliveriesForUser(limit, page, user));
         List<Delivery> deliveriesForPay = DeliveryManager.findDeliveriesWithStatus(DeliveryStatus.APPROVED, user);
         req.getSession().setAttribute("deliveriesForPay", deliveriesForPay);
-        req.setAttribute("commonPrice", deliveriesForPay.stream().map(Delivery::getPrice).reduce(Integer::sum).orElse(null));
+        req.setAttribute("commonPrice", deliveriesForPay.stream().map(Delivery::getPrice)
+                .reduce(Integer::sum).orElse(null));
         req.getRequestDispatcher("/WEB-INF/privateOffice.jsp").forward(req, resp);
     }
 }

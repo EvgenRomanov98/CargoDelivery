@@ -7,7 +7,6 @@ import ua.epam.cargo_delivery.dto.MapBoxResp;
 import ua.epam.cargo_delivery.exceptions.HttpException;
 import ua.epam.cargo_delivery.model.Util;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -26,9 +25,10 @@ public class MapBoxClient {
     }
 
     public static void setSecretToken(String token) {
-        if (secretToken == null) {
-            MapBoxClient.secretToken = token;
+        if (secretToken != null) {
+            throw new IllegalStateException("Secret token already initialized");
         }
+        MapBoxClient.secretToken = token;
     }
 
     public static DeliveryDTO getGeoJson(String from, String to) {
@@ -50,7 +50,7 @@ public class MapBoxClient {
             return DeliveryDTO.builder()
                     .lngLat(resp.getLngLat())
                     .distance(resp.getDistance()).build();
-        } catch (IOException | InterruptedException e) {
+        } catch (Exception e) {
             String message = "Can't calculate distance!";
             log.error(message, e);
             throw new HttpException(message, e);

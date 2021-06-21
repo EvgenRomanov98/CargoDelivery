@@ -1,10 +1,10 @@
 package ua.epam.cargo_delivery.model.db;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import ua.epam.cargo_delivery.exceptions.CreateUserException;
 import ua.epam.cargo_delivery.model.EncryptUtil;
 import ua.epam.cargo_delivery.model.Util;
@@ -13,9 +13,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 @Data
-@Builder()
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
+@NoArgsConstructor
 public class User extends Entity {
     private String email;
     @JsonIgnore
@@ -25,7 +24,15 @@ public class User extends Entity {
     private String phone;
     private Role role;
 
-    public User() {
+    @Builder
+    private User(Long id, String email, String password, String name, String surname, String phone, Role role) {
+        super(id);
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.phone = phone;
+        this.role = role;
     }
 
     public User(Role role) {

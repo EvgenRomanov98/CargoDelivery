@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 public class DBManager {
     private final Logger log = LogManager.getLogger(DBManager.class);
     private static DBManager instance;
-    private final DataSource ds;
     private static final Pattern COLUMN_PATTERN = Pattern.compile("^(id|price|distance|whence|whither)$");
 
     private static final String INSERT_USER = "INSERT INTO users (email, password, role_id, name, surname, phone) VALUES (?, ?, ?, ?, ?, ?)";
@@ -51,20 +50,8 @@ public class DBManager {
     private static final String UPDATE_DATE_DELIVERY = "UPDATE deliveries SET delivery_date = to_date(?, 'YYYY-MM-DD') WHERE id = ?";
     private static final String SELECT_CITIES = "SELECT * FROM cities";
 
-    private DBManager() {
-        try {
-            InitialContext cxt = new InitialContext();
-            ds = (DataSource) cxt.lookup("java:/comp/env/jdbc/postgres");
-            if (ds == null) {
-                throw new DBException("Data source not found!");
-            }
-        } catch (NamingException e) {
-            throw new IllegalStateException("Error init DBManager", e);
-        }
-    }
-
     public Connection getConnection() throws SQLException {
-        return ds.getConnection();
+        return DBInit.getConnection();
     }
 
     public static synchronized DBManager getInstance() {

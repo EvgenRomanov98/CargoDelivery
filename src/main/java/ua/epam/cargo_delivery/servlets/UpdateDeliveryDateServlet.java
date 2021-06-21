@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat;
 
 @WebServlet(name = "UpdateDeliveryDateServlet", urlPatterns = "/updateDeliveryDate")
 public class UpdateDeliveryDateServlet extends HttpServlet {
-    private DateFormat dateFormat = new SimpleDateFormat();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
