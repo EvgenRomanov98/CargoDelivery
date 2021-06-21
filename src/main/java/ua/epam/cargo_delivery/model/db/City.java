@@ -11,12 +11,14 @@ public class City extends Entity {
 
     private String name;
     private String region;
+    private String localeKey;
 
     @Builder
-    public City(Long id, String name, String region) {
+    public City(Long id, String name, String region, String localeKey) {
         super(id);
         this.name = name;
         this.region = region;
+        this.localeKey = localeKey;
     }
 
     @Override

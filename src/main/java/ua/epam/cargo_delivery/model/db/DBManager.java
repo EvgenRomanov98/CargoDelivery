@@ -340,14 +340,19 @@ public class DBManager {
         try (ResultSet rs = c.prepareStatement(SELECT_CITIES).executeQuery()) {
             ArrayList<City> cities = new ArrayList<>();
             while (rs.next()) {
-                cities.add(new City(
-                        rs.getLong("id"),
-                        rs.getString("name"),
-                        rs.getString("region")
-                ));
+                cities.add(extractCity(rs));
             }
             return cities;
         }
+    }
+
+    private City extractCity(ResultSet rs) throws SQLException {
+        return new City(
+                rs.getLong("id"),
+                rs.getString("name"),
+                rs.getString("region"),
+                rs.getString("locale_key")
+        );
     }
 
     private User extractUser(ResultSet rs) throws SQLException {

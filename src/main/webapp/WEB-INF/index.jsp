@@ -4,7 +4,10 @@
 <%@ page import="ua.epam.cargo_delivery.model.Action" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<html lang="en">
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${param.lang == null ? 'en' : param.lang}"/>
+<fmt:setBundle basename="messages"/>
+<html lang="${param.lang == null ? 'en' : param.lang}">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -16,25 +19,40 @@
     <link href="<c:url value="/css/map.css"/>" rel="stylesheet">
     <link href="<c:url value="/css/pagination.css"/>" rel="stylesheet">
     <link rel="icon" href='<c:url value="/favicon.ico" />' type="image/x-icon">
-    <title>Main</title>
+    <title>123 Delivery</title>
 </head>
 <body>
 <nav class="navbar sticky-top navbar-light bg-light">
-    <div class="container-fluid">
-        <div>
+    <div class="container-fluid row px-2">
+        <div class="col-6">
             <a id="homeLocation" class="navbar-brand" href="<c:url value="/"/>">123 Delivery</a>
-            <!-- Option 1: Bootstrap Bundle with Popper -->
-            <!-- Button trigger modal -->
         </div>
-        <div class="justify-content-end">
+        <div class="col d-flex justify-content-end">
+            <div class="dropdown">
+                <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    <c:if test="${param.lang == null}">
+                        en
+                    </c:if>
+                    <c:if test="${param.lang != null}">
+                        ${param.lang}
+                    </c:if>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" href="?lang=en">en</a></li>
+                    <li><a class="dropdown-item" href="?lang=ru">ru</a></li>
+                    <li><a class="dropdown-item" href="?lang=ua">ua</a></li>
+                </ul>
+            </div>
             <c:if test="${sessionScope.loggedUser.role == 'USER'}">
                 <button type="button" class="btn btn-outline-info btn-sm text-dark" data-bs-toggle="modal"
                         data-bs-target="#staticBackdrop">
-                    Authorization
+                    <fmt:message key="authorization"/>
                 </button>
                 <button type="button" class="btn btn-outline-info btn-sm text-dark" data-bs-toggle="modal"
                         data-bs-target="#registrationStaticBackdrop">
-                    Registration
+                    <fmt:message key="registration"/>
                 </button>
             </c:if>
             <c:if test="${sessionScope.loggedUser.role != 'USER'}">
@@ -50,11 +68,11 @@
 </nav>
 <section class="container my-5">
     <div class="row align-items-center">
-        <h4 class="col">We deliver cargoes in and between areas:</h4>
+        <h4 class="col"><fmt:message key="available.regions"/></h4>
         <div class="col">
             <ul class="list-group list-group-flush">
                 <c:forEach items="${sessionScope.availableRegions}" var="region">
-                    <li class="list-group-item text-center">${region.name}</li>
+                    <li class="list-group-item text-center"><fmt:message key="${region.localeKey}"/></li>
                 </c:forEach>
             </ul>
         </div>
@@ -66,28 +84,28 @@
         <form class="col container-fluid" action="<c:url value="/privateOffice"/>" method="post">
             <section class="row">
                 <div class="form-floating mb-3 col">
-                    <input name="from" class="form-control" id="from" placeholder="Longitude,Latitude From">
-                    <label for="from" style="left: auto">Longitude,Latitude From</label>
+                    <input name="from" class="form-control" id="from" placeholder="<fmt:message key="location.from"/>">
+                    <label for="from" style="left: auto"><fmt:message key="location.from"/></label>
                 </div>
                 <div class="form-floating mb-3 col">
-                    <input name="to" class="form-control" id="to" placeholder="Longitude,Latitude To">
-                    <label for="to" style="left: auto">Longitude,Latitude To</label>
+                    <input name="to" class="form-control" id="to" placeholder="<fmt:message key="location.to"/>">
+                    <label for="to" style="left: auto"><fmt:message key="location.to"/></label>
                 </div>
                 <label><input name="fromRegionId" id="fromRegionId" hidden></label>
                 <label><input name="toRegionId" id="toRegionId" hidden></label>
             </section>
             <section class="row">
                 <div class="form-floating mb-3 col">
-                    <input name="fromName" class="form-control" id="fromName" placeholder="City from">
-                    <label for="fromName" style="left: auto">City from</label>
+                    <input name="fromName" class="form-control" id="fromName" placeholder="<fmt:message key="address.from"/>">
+                    <label for="fromName" style="left: auto"><fmt:message key="address.from"/></label>
                 </div>
                 <div class="form-floating mb-3 col">
-                    <input name="toName" class="form-control" id="toName" placeholder="City to">
-                    <label for="toName" style="left: auto">City to</label>
+                    <input name="toName" class="form-control" id="toName" placeholder="<fmt:message key="address.to"/>">
+                    <label for="toName" style="left: auto"><fmt:message key="address.to"/></label>
                 </div>
             </section>
             <section class="row">
-                <label class="col">Weight, kg
+                <label class="col"><fmt:message key="display.weight"/>
                     <select name="weight" id="weight" class="form-select overflow-hidden" multiple>
                         <option value="100" selected><100</option>
                         <option value="500">100 - 500</option>
@@ -95,7 +113,7 @@
                         <option value="1500">1000 - 1500</option>
                     </select>
                 </label>
-                <label class="col">Length, mm
+                <label class="col"><fmt:message key="display.length"/>
                     <select name="length" id="length" class="form-select overflow-hidden" multiple>
                         <option value="1000" selected><1000</option>
                         <option value="2000">1000 - 2000</option>
@@ -103,7 +121,7 @@
                         <option value="4000">3000 - 3000</option>
                     </select>
                 </label>
-                <label class="col">Width, mm
+                <label class="col"><fmt:message key="display.width"/>
                     <select name="width" id="width" class="form-select overflow-hidden" multiple>
                         <option value="400" selected><400</option>
                         <option value="900">400 - 900</option>
@@ -111,7 +129,7 @@
                         <option value="1700">1400 - 1700</option>
                     </select>
                 </label>
-                <label class="col">Height, mm
+                <label class="col"><fmt:message key="display.height"/>
                     <select name="height" id="height" class="form-select overflow-hidden" multiple>
                         <option value="400" selected>>400</option>
                         <option value="900">400 - 900</option>
@@ -127,12 +145,12 @@
                     <c:if test="${sessionScope.loggedUser.role.checkPermission(Action.CREATE_DELIVERY)}">
                         <button type="submit"
                                 class="btn btn-outline-success col-5 col-xxl-4 ms-2">
-                            Create
+                            <fmt:message key="button.create"/>
                         </button>
                     </c:if>
                     <button class="btn btn-outline-info col-5 col-xxl-4" type="button"
                             onclick="calculatePrice('<c:url value="/calculatePrice"/>')">
-                        Calculate
+                        <fmt:message key="button.calculate"/>
                     </button>
                 </div>
             </section>
@@ -141,39 +159,39 @@
 </div>
 <section id="tableSection">
     <table id="deliveryTable" class="table caption-top">
-        <caption>List of deliveries</caption>
+        <caption><fmt:message key="table.caption"/></caption>
         <thead class="table-dark">
         <tr class="align-middle">
             <th scope="col">
                 <div class="container-fluid row m-0 p-0 align-items-center">
-                    <span class="col-7" col="fromName">From</span>
+                    <span class="col-7" col="fromName"><fmt:message key="table.from"/></span>
                     <div class="col">
                         <div class="input-group input-group-sm">
                             <label for="filterWhence" class="input-group-text">
                                 <img src="<c:url value="/icons/filter.svg"/>" alt="Filter">
                             </label>
                             <input id="filterWhence" col="fromName" type="text" class="form-control"
-                                   placeholder="From filter by">
+                                   placeholder="<fmt:message key="filter.from.description"/>">
                         </div>
                     </div>
                 </div>
             </th>
             <th scope="col">
                 <div class="container-fluid row m-0 p-0 align-items-center">
-                    <span class="col-7" col="toName">To</span>
+                    <span class="col-7" col="toName"><fmt:message key="table.to"/></span>
                     <div class="col">
                         <div class="input-group input-group-sm">
                             <label for="filterWhither" class="input-group-text">
                                 <img src="<c:url value="/icons/filter.svg"/>" alt="Filter">
                             </label>
                             <input id="filterWhither" col="toName" type="text" class="form-control"
-                                   placeholder="To filter by">
+                                   placeholder="<fmt:message key="filter.to.description"/>">
                         </div>
                     </div>
                 </div>
             </th>
-            <th scope="col"><span col="distance" class="d-flex">Distance, m</span></th>
-            <th scope="col"><span col="price" class="d-flex">Price, UAH</span></th>
+            <th scope="col"><span col="distance" class="d-flex"><fmt:message key="table.distance"/></span></th>
+            <th scope="col"><span col="price" class="d-flex"><fmt:message key="table.price"/></span></th>
         </tr>
         </thead>
         <tbody id="data-container" class="container-fluid">
