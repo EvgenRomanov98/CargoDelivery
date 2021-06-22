@@ -1,7 +1,14 @@
+<!DOCTYPE html>
 <%@ page import="ua.epam.cargo_delivery.model.db.DeliveryStatus" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="tf" %>
+
+<fmt:setLocale value="${param.lang == null ? 'en' : param.lang}"/>
+<fmt:setBundle basename="messages"/>
+<c:set scope="page" value="${param.lang == null ? 'en' : param.lang}" var="lang"/>
+<html lang="${param.lang == null ? 'en' : param.lang}">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -19,12 +26,7 @@
             <a id="homeLocation" class="navbar-brand" href="<c:url value="/"/>">123 Delivery</a>
         </div>
         <div class="justify-content-end">
-            <a href="#" class="btn btn-outline-info btn-sm">
-                ${loggedUser.name} ${loggedUser.surname}
-            </a>
-            <a href="<c:url value="/signOut"/>" class="btn btn-outline-dark btn-sm">
-                Sign out
-            </a>
+            <tf:auth/>
         </div>
     </div>
 </nav>

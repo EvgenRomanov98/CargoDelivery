@@ -27,7 +27,9 @@ public class PaginationDeliveryServlet extends HttpServlet {
         boolean asc = Optional.ofNullable(req.getParameter("ascending")).filter(s -> !s.isBlank()).map(Boolean::parseBoolean).orElse(true);
         String filterFrom = Optional.ofNullable(req.getParameter("filter[fromName]")).orElse("");
         String filterTo = Optional.ofNullable(req.getParameter("filter[toName]")).orElse("");
-        List<Delivery> deliveries = DeliveryManager.findDeliveries(limit, page, orderBy, asc, filterFrom, filterTo);
+        Long userId = Optional.ofNullable(req.getParameter("userId")).filter(s -> !s.isBlank()).map(Long::parseLong).orElse(null);
+        List<Delivery> deliveries = DeliveryManager.findDeliveries(limit, page, orderBy, asc, filterFrom, filterTo, userId);
+        resp.setCharacterEncoding("UTF-8");
         resp.getWriter().write(DeliveryDTO.builder().deliveries(deliveries).build().toString());
     }
 }

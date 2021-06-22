@@ -20,13 +20,13 @@ public class DeliveryManager {
     }
 
     public static List<Delivery> findDeliveries(int limit, int page) {
-        return findDeliveries(limit, page, "id", true, "", "");
+        return findDeliveries(limit, page, "id", true, "", "", null);
     }
 
     public static List<Delivery> findDeliveries(int limit, int page, String orderBy, boolean asc,
-                                                String filterFrom, String filterTo) {
+                                                String filterFrom, String filterTo, Long userId) {
         try (Connection c = db.getConnection()) {
-            return db.findDeliveries(c, limit, page, orderBy, asc, filterFrom, filterTo);
+            return db.findDeliveries(c, limit, page, orderBy, asc, filterFrom, filterTo, userId);
         } catch (SQLException e) {
             throw new DBException("Fail get Deliveries", e);
         }
@@ -131,6 +131,14 @@ public class DeliveryManager {
             String message = "Failed get deliveries for report";
             log.error(message, e);
             throw new AppException(message, e);
+        }
+    }
+
+    public static Integer getTotalNumberForUser(User u) {
+        try (Connection c = db.getConnection()) {
+            return db.numberOfDeliveriesForUser(c, u.getId());
+        } catch (SQLException e) {
+            throw new DBException("Can't find number of deliveries ", e);
         }
     }
 }

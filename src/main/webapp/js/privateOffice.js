@@ -1,57 +1,3 @@
-function validateForm() {
-    let passwordCheck = $('#passwordCheck');
-    let pass = $('#registerPassword');
-    if (pass.val() !== passwordCheck.val()) {
-        pass.addClass('is-invalid')
-        passwordCheck.addClass('is-invalid')
-        alert('Passwords not same')
-        return false;
-    }
-    if (Array.from(document.querySelectorAll('form[action=registration] .is-invalid')).length !== 0) {
-        return false;
-    }
-    pass.addClass('is-valid')
-    passwordCheck.addClass('is-valid')
-    return true;
-}
-
-function checkUniqueEmail(url) {
-    let email = $('#email');
-    $.get(url,
-        {
-            check: 'email',
-            param: email.val()
-        },
-        function (data) {
-            let resp = JSON.parse(data);
-            if (resp.exist) {
-                email.addClass("is-invalid");
-                alert("Email already exist");
-                return;
-            }
-            email.removeClass('is-invalid');
-            email.addClass('is-valid');
-        })
-}
-
-function checkUniquePhone(url) {
-    let phone = $('#phone');
-    $.get(url,
-        {
-            check: 'phone',
-            param: phone.val()
-        },
-        function (data) {
-            let resp = JSON.parse(data);
-            if (resp.exist) {
-                phone.addClass("is-invalid");
-                alert("Phone already exist");
-                return;
-            }
-            phone.removeClass('is-invalid')
-            phone.addClass("is-valid")
-        })
-}
 window.addEventListener('load', pagination());
 
 function pagination(colName = 'id', trigger = false, asc = true, filterObj = {fromName: '', toName: ''}) {
@@ -73,7 +19,8 @@ function pagination(colName = 'id', trigger = false, asc = true, filterObj = {fr
             data: {
                 orderBy: colName,
                 ascending: asc,
-                filter: filterObj
+                filter: filterObj,
+                userId: sessionStorage.getItem("userId")
             }
         },
         callback: function (data, pagination) {
@@ -84,22 +31,40 @@ function pagination(colName = 'id', trigger = false, asc = true, filterObj = {fr
 
     function templating(data) {
         let html = '';
+        console.log(data);
         $.each(data, function (index, item) {
+            let info = '';
+            if (item.status === 'CREATED') {
+                info = 'Wait approve manager';
+            } else {
+                info = `<a href='` + rootLocation + `getReceipt?idDelivery=` + item.id + `'>
+                          <button class="btn btn-info">` + sessionStorage.getItem('button.get.receipt') + `</button>
+                        </a>`
+            }
             html += `<tr>
-                <td class="table-tb-width-40">
+                <td>` + item.cargo.description + `</td>
+                <td>
                     <div class="d-flex flex-column">
                         <div class="flex-row flex-wrap">` + item.fromName + `</div>
                         <div class="flex-row flex-wrap text-muted fs-6">` + item.whence + `</div>
                     </div>
                 </td>
-                <td class="table-tb-width-40">
+                <td>
                     <div class="d-flex flex-column">
                         <div class="flex-row flex-wrap">` + item.toName + `</div>
                         <div class="flex-row flex-wrap text-muted fs-6">` + item.whither + `</div>
                     </div>
                 </td>
+                <td>` + item.createDate + `</td>
+                <td>` + (item.deliveryDate ? item.deliveryDate : '') + `</td>
                 <td>` + item.distance + `</td>
                 <td>` + item.price + `</td>
+                <td>` + item.cargo.weight + `</td>
+                <td>` + item.cargo.length + `</td>
+                <td>` + item.cargo.width + `</td>
+                <td>` + item.cargo.height + `</td>
+                <td>` + item.status + `</td>
+                <td>` + info + `</td>
             </tr>`;
         });
         return html;
@@ -124,4 +89,3 @@ function initSortAndFilterTable(asc) {
         pagination(input.getAttribute('col'), true, asc, filterObj);
     })));
 }
-

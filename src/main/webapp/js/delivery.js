@@ -8,11 +8,14 @@ function filterTable() {
         });
     });
 }
+
 filterTable();
 
 let section = document.getElementById("tableSection");
 //set fixed height table
-section.style.height = section.offsetHeight + 'px';
+if (section) {
+    section.style.height = section.offsetHeight + 'px';
+}
 
 function calculatePrice(url) {
     $.get(url,

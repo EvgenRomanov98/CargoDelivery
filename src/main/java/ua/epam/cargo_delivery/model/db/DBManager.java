@@ -5,9 +5,6 @@ import org.apache.logging.log4j.Logger;
 import ua.epam.cargo_delivery.exceptions.DBException;
 import ua.epam.cargo_delivery.model.Util;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,9 +12,11 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class DBManager {
+
     private final Logger log = LogManager.getLogger(DBManager.class);
     private static DBManager instance;
-    private static final Pattern COLUMN_PATTERN = Pattern.compile("^(id|price|distance|whence|whither)$");
+    private static final Pattern COLUMN_PATTERN = Pattern.compile("^(price|distance|whence|whither|c.description|d.from_name|" +
+            "d.to_name|d.create_date|d.delivery_date|d.distance|d.price|c.weight|c.length|c.width|c.height|d.status)$");
 
     private static final String INSERT_USER = "INSERT INTO users (email, password, role_id, name, surname, phone) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SELECT_USER = "SELECT id AS u_id, email, password, name, surname, phone, role_id " +
@@ -25,8 +24,8 @@ public class DBManager {
     private static final String SELECT_USER_BY_PHONE = "SELECT id AS u_id, * from users where phone = ?";
     private static final String INSERT_CARGO = "INSERT INTO cargoes (description, weight, length, width, height) VALUES (?, ?, ?, ?, ?)";
     private static final String INSERT_DELIVERY = "INSERT INTO deliveries (whence, whither, from_name, to_name, distance, price, cargo_id, status_id, user_id, from_region_id, to_region_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_DELIVERIES_WITH_LIMIT = "SELECT id AS d_id, * " +
-            "FROM deliveries WHERE status_id != 6 AND from_name LIKE ? AND to_name LIKE ? ORDER BY id LIMIT ? OFFSET ?";
+    private static final String SELECT_DELIVERIES_WITH_LIMIT = "SELECT d.id AS d_id, c.id as c_id, * " +
+            "FROM deliveries d JOIN cargoes c on c.id = d.cargo_id WHERE d.status_id != 6 AND d.from_name LIKE ? AND d.to_name LIKE ? ORDER BY d.id LIMIT ? OFFSET ?";
     private static final String SELECT_DELIVERIES_AND_CARGO_WITH_LIMIT_FOR_USER = "SELECT d.id AS d_id, " +
             "d.whence, d.whither, d.from_name, d.to_name, d.create_date, d.delivery_date, d.distance, d.price, d.status_id, " +
             "c.id AS c_id, c.description, c.weight, c.width, c.length, c.height " +
@@ -38,6 +37,7 @@ public class DBManager {
             "JOIN users u ON u.id = d.user_id WHERE status_id != 6 ORDER BY ? LIMIT ? OFFSET ?";
     private static final String SELECT_DELIVERIES_FOR_USER_IN_STATUS = "SELECT id AS d_id, * FROM deliveries WHERE user_id = ? AND status_id = ?";
     private static final String SELECT_NUMBER_OF_DELIVERIES = "SELECT count(*) FROM deliveries";
+    private static final String SELECT_NUMBER_OF_DELIVERIES_FOR_USER = "SELECT count(*) FROM deliveries WHERE user_id = ?";
     private static final String SELECT_DELIVERIES_REPORT = "SELECT *, d.id as d_id, u.id as u_id, c.id as c_id " +
             "FROM deliveries d " +
             "         join cargoes c on c.id = d.cargo_id " +
@@ -110,25 +110,34 @@ public class DBManager {
     }
 
     public List<Delivery> findDeliveries(Connection c, int limit, int page, String orderBy, boolean asc,
-                                         String filterFrom, String filterTo) throws SQLException {
+                                         String filterFrom, String filterTo, Long userId) throws SQLException {
         ResultSet rs = null;
         page = page == 0 ? page : --page;
         String ascStr = asc ? "" : "DESC";
         String sql;
         if (COLUMN_PATTERN.matcher(orderBy).matches()) {
-            sql = SELECT_DELIVERIES_WITH_LIMIT.replace("ORDER BY id", "ORDER BY " + orderBy + " " + ascStr);
+            sql = SELECT_DELIVERIES_WITH_LIMIT.replace("ORDER BY d.id", "ORDER BY " + orderBy + " " + ascStr);
         } else {
-            sql = asc ? SELECT_DELIVERIES_WITH_LIMIT : SELECT_DELIVERIES_WITH_LIMIT.replace("ORDER BY id", "ORDER BY id DESC");
+            sql = asc ? SELECT_DELIVERIES_WITH_LIMIT : SELECT_DELIVERIES_WITH_LIMIT.replace("ORDER BY d.id", "ORDER BY d.id DESC");
+        }
+        if (userId != null) {
+            sql = sql.replace("WHERE", "WHERE d.user_id = ? AND ");
         }
         try (PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setString(1, "%" + filterFrom + "%");
-            ps.setString(2, "%" + filterTo + "%");
-            ps.setInt(3, limit);
-            ps.setInt(4, page * limit);
+            int i = 1;
+            if (userId != null) {
+                ps.setLong(i++, userId);
+            }
+            ps.setString(i++, "%" + filterFrom + "%");
+            ps.setString(i++, "%" + filterTo + "%");
+            ps.setInt(i++, limit);
+            ps.setInt(i, page * limit);
             rs = ps.executeQuery();
             List<Delivery> deliveries = new ArrayList<>();
             while (rs.next()) {
-                deliveries.add(extractDelivery(rs));
+                Delivery d = extractDelivery(rs);
+                d.setCargo(extractCargo(rs));
+                deliveries.add(d);
             }
             return deliveries;
         } finally {
@@ -271,6 +280,18 @@ public class DBManager {
         try (ResultSet rs = c.prepareStatement(SELECT_NUMBER_OF_DELIVERIES).executeQuery()) {
             rs.next();
             return rs.getInt(1);
+        }
+    }
+
+    public Integer numberOfDeliveriesForUser(Connection c, Long id) throws SQLException {
+        ResultSet rs = null;
+        try (PreparedStatement ps = c.prepareStatement(SELECT_NUMBER_OF_DELIVERIES_FOR_USER)) {
+            ps.setLong(1, id);
+            rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        } finally {
+            Util.closeResource(rs);
         }
     }
 
