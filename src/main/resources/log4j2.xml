@@ -6,9 +6,6 @@
         </Console>
     </Appenders>
     <Loggers>
-        <!--        <Logger name="ua.epam.cargo_delivery.listeners.CtxListener" level="trace" additivity="false">-->
-        <!--            <AppenderRef ref="Console"/>-->
-        <!--        </Logger>-->
         <Root level="trace">
             <AppenderRef ref="Console"/>
         </Root>
