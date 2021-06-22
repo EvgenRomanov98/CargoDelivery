@@ -1,22 +1,33 @@
 function validateForm() {
     let passwordCheck = $('#passwordCheck');
     let pass = $('#registerPassword');
+    if (!pass.val() || !passwordCheck.val()) {
+        pass.addClass('is-invalid');
+        passwordCheck.addClass('is-invalid');
+        return false;
+    }
     if (pass.val() !== passwordCheck.val()) {
-        pass.addClass('is-invalid')
-        passwordCheck.addClass('is-invalid')
-        alert('Passwords not same')
+        pass.addClass('is-invalid');
+        passwordCheck.addClass('is-invalid');
+        alert('Passwords not same');
         return false;
     }
-    if (Array.from(document.querySelectorAll('form[action=registration] .is-invalid')).length !== 0) {
-        return false;
-    }
+    pass.removeClass('is-invalid')
+    passwordCheck.removeClass('is-invalid')
     pass.addClass('is-valid')
     passwordCheck.addClass('is-valid')
-    return true;
+    return Array.from(document.querySelectorAll('form[action=registration] .is-invalid')).length === 0;
 }
+
+var regExpEmail = /^\S+@\S+\.\S+$/;
 
 function checkUniqueEmail(url) {
     let email = $('#email');
+    if (!regExpEmail.exec(email.val())) {
+        email.addClass("is-invalid");
+        email.removeClass("is-valid")
+        return;
+    }
     $.get(url,
         {
             check: 'email',
@@ -34,8 +45,15 @@ function checkUniqueEmail(url) {
         })
 }
 
+let regExpPhone = new RegExp("(\\+38)?(0\\d{9})");
+
 function checkUniquePhone(url) {
     let phone = $('#phone');
+    if (!regExpPhone.exec(phone.val())) {
+        phone.addClass("is-invalid");
+        phone.removeClass("is-valid")
+        return;
+    }
     $.get(url,
         {
             check: 'phone',
@@ -45,6 +63,7 @@ function checkUniquePhone(url) {
             let resp = JSON.parse(data);
             if (resp.exist) {
                 phone.addClass("is-invalid");
+                phone.removeClass("is-valid")
                 alert("Phone already exist");
                 return;
             }
@@ -52,6 +71,7 @@ function checkUniquePhone(url) {
             phone.addClass("is-valid")
         })
 }
+
 window.addEventListener('load', pagination());
 
 function pagination(colName = 'id', trigger = false, asc = true, filterObj = {fromName: '', toName: ''}) {
@@ -67,6 +87,7 @@ function pagination(colName = 'id', trigger = false, asc = true, filterObj = {fr
         totalNumber: sessionStorage.getItem("totalNumber"),
         pageSize: pageSize,
         pageNumber: page,
+        pageRange: 1,
         className: 'paginationjs-small d-flex justify-content-end mx-5 pb-3',
         ajax: {
             type: 'POST',

@@ -35,7 +35,7 @@ function calculatePrice(url) {
                 alert("Invalid input data!");
                 return;
             }
-            document.getElementById("price").innerHTML = 'Calculated price: ' + resp.price;
+            document.getElementById("price").innerHTML = 'Calculated price: ' + resp.price + " UAH";
             let inputPrice = document.getElementById("inputPrice");
             if (inputPrice != null) {
                 inputPrice.value = resp.price;

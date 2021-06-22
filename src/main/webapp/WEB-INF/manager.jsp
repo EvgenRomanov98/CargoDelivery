@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ page import="ua.epam.cargo_delivery.model.db.DeliveryStatus" %>
+<%@ page import="java.time.LocalDate" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -26,7 +27,13 @@
             <a id="homeLocation" class="navbar-brand" href="<c:url value="/"/>">123 Delivery</a>
         </div>
         <div class="justify-content-end">
-            <tf:auth/>
+            <a href="<c:url value="/manager"/>"
+               class="btn btn-outline-info btn-sm">
+                ${sessionScope.loggedUser.name} ${sessionScope.loggedUser.surname}
+            </a>
+            <a href="<c:url value="/signOut"/>" class="btn btn-outline-dark btn-sm">
+                <fmt:message key="sign.out"/>
+            </a>
         </div>
     </div>
 </nav>
@@ -40,14 +47,14 @@
             <th scope="col">Whither</th>
             <th scope="col">CreateDate</th>
             <th scope="col">DeliveryDate</th>
-            <th scope="col">Distance</th>
-            <th scope="col">Weight</th>
-            <th scope="col">Length</th>
-            <th scope="col">Width</th>
-            <th scope="col">Height</th>
+            <th scope="col">Distance, m</th>
+            <th scope="col">Weight, kg</th>
+            <th scope="col">Length, mm</th>
+            <th scope="col">Width, mm</th>
+            <th scope="col">Height, mm</th>
             <th scope="col">Name</th>
             <th scope="col">Surname</th>
-            <th scope="col">Price</th>
+            <th scope="col">Price, UAH</th>
             <th scope="col">Status</th>
         </tr>
         </thead>
@@ -70,7 +77,8 @@
                 <td>${delivery.createDate}</td>
                 <td>
                     <label>
-                        <input class="form-control date" type="date" id="deliveryDate-${delivery.id}"
+                        <input class="form-control date" type="date" min="<%=LocalDate.now()%>"
+                               id="deliveryDate-${delivery.id}"
                                value="${delivery.deliveryDate}"
                                oninput="updateDeliveryDate('<c:url value="/updateDeliveryDate"/>', ${delivery.id})">
                     </label>

@@ -10,10 +10,6 @@
         <res-auth>Container</res-auth>
     </resource-ref>
 
-<!--    <error-page>-->
-<!--        <location>/error.jsp</location>-->
-<!--    </error-page>-->
-
     <filter-mapping>
         <filter-name>LoggingFilter</filter-name>
         <url-pattern>/*</url-pattern>

@@ -79,11 +79,11 @@
         <form class="col container-fluid" action="<c:url value="/privateOffice?lang=${param.lang == null ? 'en' : param.lang}"/>" method="post">
             <section class="row">
                 <div class="form-floating mb-3 col">
-                    <input name="from" class="form-control" id="from" placeholder="<fmt:message key="location.from"/>">
+                    <input name="from" class="form-control" id="from" placeholder="<fmt:message key="location.from"/>" readonly>
                     <label for="from" style="left: auto"><fmt:message key="location.from"/></label>
                 </div>
                 <div class="form-floating mb-3 col">
-                    <input name="to" class="form-control" id="to" placeholder="<fmt:message key="location.to"/>">
+                    <input name="to" class="form-control" id="to" placeholder="<fmt:message key="location.to"/>" readonly>
                     <label for="to" style="left: auto"><fmt:message key="location.to"/></label>
                 </div>
                 <label><input name="fromRegionId" id="fromRegionId" hidden></label>
@@ -92,11 +92,11 @@
             <section class="row">
                 <div class="form-floating mb-3 col">
                     <input name="fromName" class="form-control" id="fromName"
-                           placeholder="<fmt:message key="address.from"/>">
+                           placeholder="<fmt:message key="address.from"/>" readonly>
                     <label for="fromName" style="left: auto"><fmt:message key="address.from"/></label>
                 </div>
                 <div class="form-floating mb-3 col">
-                    <input name="toName" class="form-control" id="toName" placeholder="<fmt:message key="address.to"/>">
+                    <input name="toName" class="form-control" id="toName" placeholder="<fmt:message key="address.to"/>" readonly>
                     <label for="toName" style="left: auto"><fmt:message key="address.to"/></label>
                 </div>
             </section>
@@ -114,7 +114,7 @@
                         <option value="1000" selected><1000</option>
                         <option value="2000">1000 - 2000</option>
                         <option value="3000">2000 - 3000</option>
-                        <option value="4000">3000 - 3000</option>
+                        <option value="4000">3000 - 4000</option>
                     </select>
                 </label>
                 <label class="col"><fmt:message key="display.width"/>

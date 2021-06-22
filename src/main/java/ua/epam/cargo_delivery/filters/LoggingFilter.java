@@ -21,7 +21,7 @@ public class LoggingFilter implements Filter {
         try {
             request.setCharacterEncoding("UTF-8");
             response.setCharacterEncoding("UTF-8");
-            log.info(">>> REQUEST: {}", ((HttpServletRequest) request).getRequestURI());
+            log.info(">>> REQUEST: {}, {}", ((HttpServletRequest) request).getRequestURI(), request.getParameterMap());
             chain.doFilter(request, response);
         } catch (Exception e) {
             log.error(e.getMessage(), e);

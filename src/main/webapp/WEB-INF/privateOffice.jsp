@@ -64,12 +64,12 @@
             <section class="row">
                 <div class="form-floating mb-3 col">
                     <input name="from" class="form-control" id="from" placeholder="<fmt:message key="location.from"/>"
-                           value="${param.from}">
+                           value="${param.from}" readonly>
                     <label for="from" style="left: auto"><fmt:message key="location.from"/></label>
                 </div>
                 <div class="form-floating mb-3 col">
                     <input name="to" class="form-control" id="to" placeholder="<fmt:message key="location.to"/>"
-                           value="${param.to}">
+                           value="${param.to}" readonly>
                     <label for="to" style="left: auto"><fmt:message key="location.to"/></label>
                 </div>
                 <label><input name="fromRegionId" id="fromRegionId" value="${param.fromRegionId}" hidden></label>
@@ -79,12 +79,12 @@
                 <div class="form-floating mb-3 col">
                     <input name="fromName" class="form-control" id="fromName"
                            placeholder="<fmt:message key="address.from"/>"
-                           value="${param.fromName}">
+                           value="${param.fromName}" readonly>
                     <label for="fromName" style="left: auto"><fmt:message key="address.from"/></label>
                 </div>
                 <div class="form-floating mb-3 col">
                     <input name="toName" class="form-control" id="toName" placeholder="<fmt:message key="address.to"/>"
-                           value="${param.toName}">
+                           value="${param.toName}" readonly>
                     <label for="toName" style="left: auto"><fmt:message key="address.to"/></label>
                 </div>
             </section>
@@ -133,7 +133,7 @@
             </section>
             <section class="row align-items-center pt-1">
                 <h6 id="price" class="col-6 my-0"><c:if
-                        test="${param.price != null}">Calculated price: ${param.price}</c:if></h6>
+                        test="${param.price != null}">Calculated price: ${param.price} UAH</c:if></h6>
                 <div class="col-6 d-flex flex-row-reverse">
                     <button type="submit"
                             class="btn btn-outline-success col-5 col-xxl-4 ms-2">
@@ -222,7 +222,7 @@
             <td>
                 <c:choose>
                     <c:when test="${delivery.status == 'CREATED'}">
-                        <p>Wait approve manager</p>
+                        <p>Wait manager's approve</p>
                     </c:when>
                     <c:otherwise>
                         <a href='<c:url value="/getReceipt?idDelivery=${delivery.id}"/>'>
