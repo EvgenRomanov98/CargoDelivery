@@ -14,7 +14,7 @@ public class ManagerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getSession().setAttribute("managerDeliveries", DeliveryManager.findDeliveriesWithCargoes(20, 0, "status_id"));
+        req.getSession().setAttribute("managerDeliveries", DeliveryManager.findDeliveriesWithCargoes(100, 0, "status_id"));
         req.getRequestDispatcher("/WEB-INF/manager.jsp").forward(req, resp);
     }
 }

@@ -227,7 +227,7 @@
 
                 <div class="form-floating">
                     <input name="email" type="email" class="form-control" id="authEmail"
-                           placeholder="name@example.com" pattern="^\S+@\S+\.\S+$" required>
+                           placeholder="name@example.com" pattern="^[a-zA-Z]+@[a-zA-Z]+\.[a-zA-Z]+$" required>
                     <label for="authEmail">Email address</label>
                 </div>
                 <div class="form-floating">
@@ -267,7 +267,7 @@
                     <label for="surname">Surname</label>
                 </div>
                 <div class="form-floating">
-                    <input name="phone" type="tel" pattern="(\+38)?(0\d{9})" required class="form-control" id="phone"
+                    <input name="phone" type="tel" pattern="^(\+38)?(0\d{9})$" required class="form-control" id="phone"
                            placeholder="+380961111111 or 0661111111" title="For example:+380961111111 or 0661111111"
                            onchange="checkUniquePhone('<c:url value="/validate"/>')">
                     <label for="phone">Phone number</label>
@@ -275,7 +275,7 @@
                 <div class="form-floating">
                     <input name="email" type="email" required class="form-control" id="email"
                            placeholder="name@example.com"
-                           pattern="^\S+@\S+\.\S+$" onchange="checkUniqueEmail('<c:url value="/validate"/>')">
+                           pattern="^[a-zA-Z1-9 ]+@[a-zA-Z]+\.[a-zA-Z]+$" onchange="checkUniqueEmail('<c:url value="/validate"/>')">
                     <label for="email">Email address</label>
                 </div>
                 <div class="form-floating">

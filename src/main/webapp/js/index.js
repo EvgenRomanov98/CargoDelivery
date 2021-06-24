@@ -19,7 +19,7 @@ function validateForm() {
     return Array.from(document.querySelectorAll('form[action=registration] .is-invalid')).length === 0;
 }
 
-var regExpEmail = /^\S+@\S+\.\S+$/;
+var regExpEmail = /^[a-zA-Z1-9]+@[a-zA-Z]+\.[a-zA-Z]+$/;
 
 function checkUniqueEmail(url) {
     let email = $('#email');
@@ -45,7 +45,7 @@ function checkUniqueEmail(url) {
         })
 }
 
-let regExpPhone = new RegExp("(\\+38)?(0\\d{9})");
+let regExpPhone = new RegExp("^(\\+38)?(0\\d{9})$");
 
 function checkUniquePhone(url) {
     let phone = $('#phone');
