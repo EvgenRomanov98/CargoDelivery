@@ -76,14 +76,17 @@
 <div class="container-fluid">
     <div class="row">
         <div id="map" class="col"></div>
-        <form class="col container-fluid" action="<c:url value="/privateOffice?lang=${param.lang == null ? 'en' : param.lang}"/>" method="post">
+        <form class="col container-fluid"
+              action="<c:url value="/privateOffice?lang=${param.lang == null ? 'en' : param.lang}"/>" method="post">
             <section class="row">
                 <div class="form-floating mb-3 col">
-                    <input name="from" class="form-control" id="from" placeholder="<fmt:message key="location.from"/>" readonly>
+                    <input name="from" class="form-control" id="from" placeholder="<fmt:message key="location.from"/>"
+                           readonly>
                     <label for="from" style="left: auto"><fmt:message key="location.from"/></label>
                 </div>
                 <div class="form-floating mb-3 col">
-                    <input name="to" class="form-control" id="to" placeholder="<fmt:message key="location.to"/>" readonly>
+                    <input name="to" class="form-control" id="to" placeholder="<fmt:message key="location.to"/>"
+                           readonly>
                     <label for="to" style="left: auto"><fmt:message key="location.to"/></label>
                 </div>
                 <label><input name="fromRegionId" id="fromRegionId" hidden></label>
@@ -96,7 +99,8 @@
                     <label for="fromName" style="left: auto"><fmt:message key="address.from"/></label>
                 </div>
                 <div class="form-floating mb-3 col">
-                    <input name="toName" class="form-control" id="toName" placeholder="<fmt:message key="address.to"/>" readonly>
+                    <input name="toName" class="form-control" id="toName" placeholder="<fmt:message key="address.to"/>"
+                           readonly>
                     <label for="toName" style="left: auto"><fmt:message key="address.to"/></label>
                 </div>
             </section>
@@ -275,7 +279,8 @@
                 <div class="form-floating">
                     <input name="email" type="email" required class="form-control" id="email"
                            placeholder="name@example.com"
-                           pattern="^[a-zA-Z1-9 ]+@[a-zA-Z]+\.[a-zA-Z]+$" onchange="checkUniqueEmail('<c:url value="/validate"/>')">
+                           pattern="^[a-zA-Z1-9 ]+@[a-zA-Z]+\.[a-zA-Z]+$"
+                           onchange="checkUniqueEmail('<c:url value="/validate"/>')">
                     <label for="email">Email address</label>
                 </div>
                 <div class="form-floating">
