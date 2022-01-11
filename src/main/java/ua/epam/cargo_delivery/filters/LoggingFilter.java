@@ -3,10 +3,7 @@ package ua.epam.cargo_delivery.filters;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +12,11 @@ import java.io.IOException;
 @WebFilter(filterName = "LoggingFilter")
 public class LoggingFilter implements Filter {
     private final Logger log = LogManager.getLogger(LoggingFilter.class);
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException {
@@ -30,5 +32,10 @@ public class LoggingFilter implements Filter {
             ((HttpServletResponse) response).sendRedirect("error.jsp");
         }
         log.info("<<< RESPONSE: {}", ((HttpServletResponse) response).getStatus());
+    }
+
+    @Override
+    public void destroy() {
+
     }
 }

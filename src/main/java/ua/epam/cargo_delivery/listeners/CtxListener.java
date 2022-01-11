@@ -40,6 +40,11 @@ public class CtxListener implements ServletContextListener {
         }
     }
 
+    @Override
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+
+    }
+
     private void checkConnectToDB() throws SQLException {
         DBInit.init();
         DBManager instance = DBManager.getInstance();
