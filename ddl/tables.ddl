@@ -1,3 +1,5 @@
+CREATE SEQUENCE roles_id_seq start 1;
+
 create table roles
 (
     id integer default nextval('roles_id_seq'::regclass) not null

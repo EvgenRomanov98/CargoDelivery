@@ -3,7 +3,7 @@ var availableRegionPattern = '';
 var availableRegions = '';
 
 var idRoute = 'route';
-mapboxgl.accessToken = 'pk.eyJ1IjoiZXZyb205OCIsImEiOiJja3BteWc2eTMwNnlrMnVudXFsZjhhdW44In0.IQYTsD8Zi1M2RVxqyB8-Fw';
+mapboxgl.accessToken = 'pk.eyJ1IjoiZXZyb205OCIsImEiOiJja3lhbzJidGgwN2RiMndvODJwazJycG15In0.6BfXf0lDuQ0gy2rff25z2w';
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
