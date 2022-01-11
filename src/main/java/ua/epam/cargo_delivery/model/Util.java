@@ -14,6 +14,7 @@ import ua.epam.cargo_delivery.model.db.Delivery;
 import ua.epam.cargo_delivery.model.db.User;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Optional;
 
 public class Util {
@@ -45,7 +46,7 @@ public class Util {
     public static <T> T readValue(String s, Class<T> classCast) {
         try {
             return om.readValue(s, classCast);
-        } catch (JsonProcessingException e) {
+        } catch (IOException e) {
             String message = "Can't parse string value to " + classCast;
             log.error(message, e);
             throw new AppException(message, e);
