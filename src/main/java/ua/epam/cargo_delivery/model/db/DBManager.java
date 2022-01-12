@@ -18,37 +18,37 @@ public class DBManager {
     private static final Pattern COLUMN_PATTERN = Pattern.compile("^(price|distance|whence|whither|c.description|d.from_name|" +
             "d.to_name|d.create_date|d.delivery_date|d.distance|d.price|c.weight|c.length|c.width|c.height|d.status)$");
 
-    private static final String INSERT_USER = "INSERT INTO users (email, password, role_id, name, surname, phone) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_USER = "INSERT INTO cargo_users (email, password, role_id, name, surname, phone) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SELECT_USER = "SELECT id AS u_id, email, password, name, surname, phone, role_id " +
-            "FROM users where email = ?";
-    private static final String SELECT_USER_BY_PHONE = "SELECT id AS u_id, * from users where phone = ?";
-    private static final String INSERT_CARGO = "INSERT INTO cargoes (description, weight, length, width, height) VALUES (?, ?, ?, ?, ?)";
-    private static final String INSERT_DELIVERY = "INSERT INTO deliveries (whence, whither, from_name, to_name, distance, price, cargo_id, status_id, user_id, from_region_id, to_region_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "FROM cargo_users where email = ?";
+    private static final String SELECT_USER_BY_PHONE = "SELECT id AS u_id, * from cargo_users where phone = ?";
+    private static final String INSERT_CARGO = "INSERT INTO cargo_cargoes (description, weight, length, width, height) VALUES (?, ?, ?, ?, ?)";
+    private static final String INSERT_DELIVERY = "INSERT INTO cargo_deliveries (whence, whither, from_name, to_name, distance, price, cargo_id, status_id, user_id, from_region_id, to_region_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_DELIVERIES_WITH_LIMIT = "SELECT d.id AS d_id, c.id as c_id, * " +
-            "FROM deliveries d JOIN cargoes c on c.id = d.cargo_id WHERE d.status_id != 6 AND d.from_name LIKE ? AND d.to_name LIKE ? ORDER BY d.id LIMIT ? OFFSET ?";
+            "FROM cargo_deliveries d JOIN cargo_cargoes c on c.id = d.cargo_id WHERE d.status_id != 6 AND d.from_name LIKE ? AND d.to_name LIKE ? ORDER BY d.id LIMIT ? OFFSET ?";
     private static final String SELECT_DELIVERIES_AND_CARGO_WITH_LIMIT_FOR_USER = "SELECT d.id AS d_id, " +
             "d.whence, d.whither, d.from_name, d.to_name, d.create_date, d.delivery_date, d.distance, d.price, d.status_id, " +
             "c.id AS c_id, c.description, c.weight, c.width, c.length, c.height " +
-            "FROM deliveries d JOIN cargoes c on c.id = d.cargo_id WHERE user_id = ? AND status_id != 6 ORDER BY status_id LIMIT ? OFFSET ?";
-    private static final String SELECT_DELIVERY_AND_CARGO_FOR_USER = "SELECT *, d.id as d_id, c.id as c_id from deliveries d " +
-            "JOIN cargoes c ON c.id = d.cargo_id WHERE d.id = ? AND d.user_id = ?";
-    private static final String SELECT_DELIVERIES_EAGER = "SELECT *, d.id AS d_id, c.id AS c_id, u.id AS u_id FROM deliveries d " +
-            "JOIN cargoes c ON c.id = d.cargo_id " +
-            "JOIN users u ON u.id = d.user_id WHERE status_id != 6 ORDER BY ? LIMIT ? OFFSET ?";
-    private static final String SELECT_DELIVERIES_FOR_USER_IN_STATUS = "SELECT id AS d_id, * FROM deliveries WHERE user_id = ? AND status_id = ?";
-    private static final String SELECT_NUMBER_OF_DELIVERIES = "SELECT count(*) FROM deliveries";
-    private static final String SELECT_NUMBER_OF_DELIVERIES_FOR_USER = "SELECT count(*) FROM deliveries WHERE user_id = ?";
+            "FROM cargo_deliveries d JOIN cargo_cargoes c on c.id = d.cargo_id WHERE user_id = ? AND status_id != 6 ORDER BY status_id LIMIT ? OFFSET ?";
+    private static final String SELECT_DELIVERY_AND_CARGO_FOR_USER = "SELECT *, d.id as d_id, c.id as c_id from cargo_deliveries d " +
+            "JOIN cargo_cargoes c ON c.id = d.cargo_id WHERE d.id = ? AND d.user_id = ?";
+    private static final String SELECT_DELIVERIES_EAGER = "SELECT *, d.id AS d_id, c.id AS c_id, u.id AS u_id FROM cargo_deliveries d " +
+            "JOIN cargo_cargoes c ON c.id = d.cargo_id " +
+            "JOIN cargo_users u ON u.id = d.user_id WHERE status_id != 6 ORDER BY ? LIMIT ? OFFSET ?";
+    private static final String SELECT_DELIVERIES_FOR_USER_IN_STATUS = "SELECT id AS d_id, * FROM cargo_deliveries WHERE user_id = ? AND status_id = ?";
+    private static final String SELECT_NUMBER_OF_DELIVERIES = "SELECT count(*) FROM cargo_deliveries";
+    private static final String SELECT_NUMBER_OF_DELIVERIES_FOR_USER = "SELECT count(*) FROM cargo_deliveries WHERE user_id = ?";
     private static final String SELECT_DELIVERIES_REPORT = "SELECT *, d.id as d_id, u.id as u_id, c.id as c_id " +
-            "FROM deliveries d " +
-            "         join cargoes c on c.id = d.cargo_id " +
-            "         join users u on u.id = d.user_id " +
+            "FROM cargo_deliveries d " +
+            "         join cargo_cargoes c on c.id = d.cargo_id " +
+            "         join cargo_users u on u.id = d.user_id " +
             "WHERE (? IS NULL OR d.from_region_id = ?) " +
             "  AND (? IS NULL OR d.to_region_id = ?) " +
             "  AND (? IS NULL OR d.create_date = ?) " +
             "  AND (? IS NULL OR d.delivery_date = ?)";
-    private static final String UPDATE_STATUS_DELIVERY = "UPDATE deliveries SET status_id = ? WHERE id = ?";
-    private static final String UPDATE_DATE_DELIVERY = "UPDATE deliveries SET delivery_date = to_date(?, 'YYYY-MM-DD') WHERE id = ?";
-    private static final String SELECT_CITIES = "SELECT * FROM cities";
+    private static final String UPDATE_STATUS_DELIVERY = "UPDATE cargo_deliveries SET status_id = ? WHERE id = ?";
+    private static final String UPDATE_DATE_DELIVERY = "UPDATE cargo_deliveries SET delivery_date = to_date(?, 'YYYY-MM-DD') WHERE id = ?";
+    private static final String SELECT_CITIES = "SELECT * FROM cargo_cities";
 
     public Connection getConnection() throws SQLException {
         return DBInit.getConnection();

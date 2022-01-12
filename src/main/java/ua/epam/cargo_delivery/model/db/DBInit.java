@@ -1,5 +1,6 @@
 package ua.epam.cargo_delivery.model.db;
 
+import lombok.extern.slf4j.Slf4j;
 import ua.epam.cargo_delivery.exceptions.DBException;
 
 import javax.naming.InitialContext;
@@ -8,6 +9,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@Slf4j
 public class DBInit {
 
     private static DataSource ds;

@@ -1,54 +1,54 @@
-CREATE SEQUENCE roles_id_seq start 1;
+CREATE SEQUENCE cargo_roles_id_seq start 1;
 
-create table roles
+create table cargo_roles
 (
-    id integer default nextval('roles_id_seq'::regclass) not null
-        constraint roles_pk
+    id integer default nextval('cargo_roles_id_seq'::regclass) not null
+        constraint cargo_roles_pk
             primary key,
     name varchar not null
 );
 
-create unique index roles_name_uindex
-    on roles (name);
+create unique index cargo_roles_name_uindex
+    on cargo_roles (name);
 
-create table users
+create table cargo_users
 (
     id bigserial
-        constraint users_pk
+        constraint cargo_users_pk
             primary key,
     email varchar,
     role_id integer not null
-        constraint users_roles_id_fk
-            references roles,
+        constraint cargo_users_roles_id_fk
+            references cargo_roles,
     password varchar,
     name varchar,
     surname varchar,
     phone varchar(13)
 );
 
-create unique index users_email_uindex
-    on users (email);
+create unique index cargo_users_email_uindex
+    on cargo_users (email);
 
-create unique index users_phone_uindex
-    on users (phone);
+create unique index cargo_users_phone_uindex
+    on cargo_users (phone);
 
-create table cities
+create table cargo_cities
 (
     id bigserial
-        constraint cities_pk
+        constraint cargo_cities_pk
             primary key,
     name varchar not null,
     region varchar,
     locale_key varchar
 );
 
-create unique index cities_name_uindex
-    on cities (name);
+create unique index cargo_cities_name_uindex
+    on cargo_cities (name);
 
-create table cargoes
+create table cargo_cargoes
 (
     id bigserial
-        constraint cargoes_pk
+        constraint cargo_cargoes_pk
             primary key,
     description varchar,
     weight integer not null,
@@ -57,18 +57,18 @@ create table cargoes
     height integer not null
 );
 
-create table delivery_status
+create table cargo_delivery_status
 (
     id serial
-        constraint delivery_status_pk
+        constraint cargo_delivery_status_pk
             primary key,
     name varchar not null
 );
 
-create table deliveries
+create table cargo_deliveries
 (
     id bigserial
-        constraint deliveries_pk
+        constraint cargo_deliveries_pk
             primary key,
     whence varchar not null,
     whither varchar not null,
@@ -77,24 +77,24 @@ create table deliveries
     distance double precision,
     price integer,
     cargo_id bigint not null
-        constraint deliveries_cargoes_id_fk
-            references cargoes
+        constraint cargo_deliveries_cargoes_id_fk
+            references cargo_cargoes
             on delete cascade,
     status_id integer default 1 not null
-        constraint deliveries_delivery_status_id_fk
-            references delivery_status,
+        constraint cargo_deliveries_delivery_status_id_fk
+            references cargo_delivery_status,
     user_id bigint
-        constraint deliveries_users_id_fk
-            references users,
+        constraint cargo_deliveries_users_id_fk
+            references cargo_users,
     to_name varchar,
     from_name varchar,
     from_region_id bigint
-        constraint deliveries_cities_id_fk_2
-            references cities,
+        constraint cargo_deliveries_cities_id_fk_2
+            references cargo_cities,
     to_region_id bigint
-        constraint deliveries_cities_id_fk
-            references cities
+        constraint cargo_deliveries_cities_id_fk
+            references cargo_cities
 );
 
-create unique index delivery_status_name_uindex
-    on delivery_status (name);
+create unique index cargo_delivery_status_name_uindex
+    on cargo_delivery_status (name);

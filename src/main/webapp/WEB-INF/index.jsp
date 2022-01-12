@@ -231,7 +231,7 @@
 
                 <div class="form-floating">
                     <input name="email" type="email" class="form-control" id="authEmail"
-                           placeholder="name@example.com" pattern="^[a-zA-Z]+@[a-zA-Z]+\.[a-zA-Z]+$" required>
+                           placeholder="name@example.com" pattern="^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]+$" required>
                     <label for="authEmail">Email address</label>
                 </div>
                 <div class="form-floating">
