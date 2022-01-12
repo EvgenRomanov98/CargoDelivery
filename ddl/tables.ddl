@@ -8,8 +8,6 @@ create table roles
     name varchar not null
 );
 
-alter table roles owner to postgres;
-
 create unique index roles_name_uindex
     on roles (name);
 
@@ -28,8 +26,6 @@ create table users
     phone varchar(13)
 );
 
-alter table users owner to postgres;
-
 create unique index users_email_uindex
     on users (email);
 
@@ -46,8 +42,6 @@ create table cities
     locale_key varchar
 );
 
-alter table cities owner to postgres;
-
 create unique index cities_name_uindex
     on cities (name);
 
@@ -63,8 +57,6 @@ create table cargoes
     height integer not null
 );
 
-alter table cargoes owner to postgres;
-
 create table delivery_status
 (
     id serial
@@ -72,8 +64,6 @@ create table delivery_status
             primary key,
     name varchar not null
 );
-
-alter table delivery_status owner to postgres;
 
 create table deliveries
 (
@@ -106,8 +96,5 @@ create table deliveries
             references cities
 );
 
-alter table deliveries owner to postgres;
-
 create unique index delivery_status_name_uindex
     on delivery_status (name);
-
