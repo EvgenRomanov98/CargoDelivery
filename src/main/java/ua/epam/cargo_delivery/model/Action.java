@@ -3,7 +3,7 @@ package ua.epam.cargo_delivery.model;
 import ua.epam.cargo_delivery.exceptions.AppException;
 
 public enum Action {
-    ROOT("/"), AUTH("/authorization"), CALCULATE_PRICE("/calculatePrice"),
+    ROOT("/main"), AUTH("/authorization"), CALCULATE_PRICE("/calculatePrice"),
     REGIONS("/availableRegions"), CREATE_DELIVERY("/createDelivery"), MANAGEMENT("/manager"),
     PAGINATION("/paginationDelivery"), PAY("/pay"), PRIVATE_OFFICE("/privateOffice"),
     RECEIPT("/getReceipt"), REGISTRATION("/registration"), SIGN_OUT("/signOut"),

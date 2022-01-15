@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -DUSER=${USER} -DPASSWORD=${PASSWORD} -DDB_URL=${DB_URL} -DCONNECTION_TYPE=SIMPLE -jar build/server/webapp-runner-*.jar build/libs/*.war --port $PORT
+web: java $JAVA_OPTS -DUSER=${USER:-postgres} -DPASSWORD=${PASSWORD:-postgres} -DDB_URL=${DB_URL:-jdbc:postgresql://localhost:5432/cargo_delivery} -DCONNECTION_TYPE=SIMPLE -jar build/server/webapp-runner-*.jar build/libs/*.war --port ${PORT:-8080}

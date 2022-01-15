@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "MainServlet", urlPatterns = "/")
+@WebServlet(name = "MainServlet", urlPatterns = "/main")
 public class MainServlet extends HttpServlet {
     private static final String AVAILABLE_REGIONS = "availableRegions";
     private static final String LOGGED_USER = "loggedUser";
