@@ -6,6 +6,7 @@ import ua.epam.cargo_delivery.clients.MapBoxClient;
 import ua.epam.cargo_delivery.exceptions.AppException;
 import ua.epam.cargo_delivery.model.db.DBInit;
 import ua.epam.cargo_delivery.model.db.DBManager;
+import ua.epam.cargo_delivery.model.db.DS_TYPE;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -46,7 +47,7 @@ public class CtxListener implements ServletContextListener {
     }
 
     private void checkConnectToDB() throws SQLException {
-        DBInit.init();
+        DBInit.init(DS_TYPE.valueOf(System.getProperty("CONNECTION_TYPE")));
         DBManager instance = DBManager.getInstance();
         log.info("Successful init DBManager and get connection {}", instance.getConnection());
     }
