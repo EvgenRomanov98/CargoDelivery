@@ -2,8 +2,8 @@
     <Resource name="jdbc/postgres" auth="Container" type="javax.sql.DataSource"
               maxTotal="20" maxIdle="10" maxWaitMillis="10000"
 
-              username="${USER}"
-              password="${PASSWORD}"
+              username="rebirqqtlsvwxm"
+              password="6b48b5b928def5036b763f0e3cf8948058d27db5e865c394d0e6e81fde89cff0"
               driverClassName="org.postgresql.Driver"
-              url="${DB_URL}"/>
+              url="jdbc:postgresql://ec2-52-30-81-192.eu-west-1.compute.amazonaws.com:5432/d3hkjkrkpv8phs"/>
 </Context>
