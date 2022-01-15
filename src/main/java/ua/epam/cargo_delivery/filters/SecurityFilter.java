@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
-@WebFilter(filterName = "SecurityFilter", urlPatterns = "/*")
+@WebFilter(filterName = "SecurityFilter")
 public class SecurityFilter implements Filter {
     private static final Logger log = LogManager.getLogger(SecurityFilter.class);
     private final Pattern p = Pattern.compile(".*(\\.css|\\.js|\\.svg|\\.html|\\.jsp|\\.map|\\.ico)$");
