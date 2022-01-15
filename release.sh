@@ -1,0 +1,1 @@
+export JAVA_TOOL_OPTIONS="-XX:+UseContainerSupport -Xmx300m -Xss512k -XX:CICompilerCount=2 -Dfile.encoding=UTF-8 -DUSER=${USER} -DPASSWORD=${PASSWORD} -DDB_URL=${DB_URL} -DCONNECTION_TYPE=SIMPLE"
