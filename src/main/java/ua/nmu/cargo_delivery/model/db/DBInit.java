@@ -14,15 +14,15 @@ public class DBInit {
 
     private static DataSource ds;
 
-    public static void init(DS_TYPE type) {
+    public static void init(DsType type) {
         try {
-            if (type == DS_TYPE.SIMPLE) {
+            if (type == DsType.SIMPLE) {
                 Class.forName("org.postgresql.Driver");
                 ds = new PGSimpleDataSource();
                 ((PGSimpleDataSource) ds).setUrl(System.getProperty("DB_URL"));
                 ((PGSimpleDataSource) ds).setUser(System.getProperty("USER"));
                 ((PGSimpleDataSource) ds).setPassword(System.getProperty("PASSWORD"));
-            } else if (type == DS_TYPE.JNDI){
+            } else if (type == DsType.JNDI){
                 if (ds != null) {
                     throw new IllegalStateException("Cannot init DataSource twice");
                 }
