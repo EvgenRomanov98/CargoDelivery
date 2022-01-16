@@ -11,7 +11,7 @@
 
     <tag>
         <name>region</name>
-        <tag-class>ua.epam.cargo_delivery.tags.RegionsTag</tag-class>
+        <tag-class>ua.nmu.cargo_delivery.tags.RegionsTag</tag-class>
         <body-content>empty</body-content>
     </tag>
     <!-- Invoke 'Generate' action to add tags or functions -->
