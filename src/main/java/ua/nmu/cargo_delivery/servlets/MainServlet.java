@@ -1,6 +1,5 @@
 package ua.nmu.cargo_delivery.servlets;
 
-import ua.epam.cargo_delivery.model.db.*;
 import ua.nmu.cargo_delivery.model.db.*;
 
 import javax.servlet.ServletException;
